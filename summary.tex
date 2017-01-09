@@ -17,26 +17,24 @@
     \end{myalign*}
     \item Production of independent variables:
     \begin{myalign*}
-        V(XY) = E(X^2)E(Y^2) - [E(X)]^2 [E(Y)]^2
+        \V(XY) = \E(X^2)\E(Y^2) - [\E(X)]^2 [\E(Y)]^2
     \end{myalign*}
     \item Covariance matrix of a data vector $\*x$
     \begin{myalign*}
-        \*\Sigma = \frac{1}{N} \sum_{n = 1}^N (\*x_n - E(\*x)(\*x_n - E(\*x)^T
+        \*\Sigma = \frac{1}{N} \sum_{n = 1}^N (\*x_n - \E(\*x))(\*x_n - \E(\*x))^T
     \end{myalign*}
 \end{itemize}
 
 \subsection{Convexity}
 \begin{itemize}
-\item A function is convex when a line joining two points never interects anywhere else.
-
 \item A function $f(x)$ is convex, if for any $x_1, x_2 \in \* X$ and for any $0 \leq \lambda \leq 1$, we have :
 $$ f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2)$$
 
 \item Strictly convex if the inequality is strict.
 
-\item A convex function has only one global minimum.
-
 \item Sums of convex functions are also convex.
+
+\item A function with the form log-sum-exp is convex.
 
 \item The Hessian is related to the convexity: a twice differentiable function is convex i-o-if the Hessian is positive definite.
 \item The Hessian of a convex function is positive semi-definite and for a strictly-convex function it is positive definite.
@@ -48,7 +46,7 @@ $$ f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2)
 
 \subsection{Linear Algebra}
 \begin{itemize}
-\item Column $\*x \in R^n$, rows $\*x^T$, matrix $\*A \in R^{m \times n}$
+\item Column $\*x \in \R^n$, rows $\*x^T$, matrix $\*A \in \R^{m \times n}$
 
 \item $\*x^T \*x$ is a scalar, $\*x \*x^T$ is a matrix
 
@@ -77,7 +75,6 @@ for any real $N \times 1$ vector $a$.
 \end{itemize}
 
 % ========================================================
-
 \section{Cost functions}
 \begin{itemize}
     \item Cost functions are used to learn parameters that explain the data well.
@@ -86,7 +83,7 @@ for any real $N \times 1$ vector $a$.
 
 \textbf{Mean square error (MSE)}:
 \begin{myalign*}
-    MSE(\bm \beta ) = \sum^N_{n = 1} (y_n - f(\* x_n ))^2
+    MSE(\bm w ) = \sum^N_{n = 1} (y_n - f(\* x_n ))^2
 \end{myalign*}
 
 \begin{itemize}
@@ -158,31 +155,30 @@ Non-convex, non-diff., but robust to outliers.
 \begin{itemize}
 	\item Model that assume linear relationship between inputs and the ouput.
 \begin{myalign*}
-    y_n &\equiv f(\* x_n) := \beta_0 + \beta_1 x_{n1} + ... = \beta_0 + \* x^T_n \bm \beta
+  y_n &\approx f(\* x_n) := w_0 + w_1 x_{n1} + ... = \w_0 + \*x^T_n \bm w
 \end{myalign*}
-with $\bm \beta$ the parameters of the model.
+with $\bm w$ the parameters of the model.
 \item Variance grows only linearly with dimensionality
 \end{itemize}
 
+% ========================================================
+\section{Optimization}
+\subsection{Grid search}
+\begin{itemize}
+    \item Compute the cost over a grid of $M$ points to find the minimum
+    \item Exponential Complexity 
+    \item Hard to find a good range of values
+\end{itemize}
 
 % ========================================================
 
 \subsection{Gradient Descent}
 \begin{itemize}
 	\item Gradient descent uses only first-order information and takes steps in the direction of the gradient
-	\item Given a cost function $\L(\bm \beta)$ we wish to find $\bm \beta$ that minimizes the cost: 
+	\item Given a cost function $\L(\bm w)$ we wish to find $\bm w$ that minimizes the cost: 
 	\begin{myalign*}
-	    \min_{\bm \beta} \L(\bm \beta)
+	    \min_{\bm w} \L(\bm w)
 	\end{myalign*}
-\end{itemize}
-
-% ========================================================
-
-\subsubsection{Grid search}
-\begin{itemize}
-    \item Compute the cost over a grid of $M$ points to find the minimum
-    \item Exponential Complexity $O(N D M^D)$
-    \item Hard to find a good range of values
 \end{itemize}
 
 % ========================================================
@@ -190,36 +186,32 @@ with $\bm \beta$ the parameters of the model.
 \subsection{Batch Gradient Descent}
 \begin{itemize}
     \item Take steps in the opposite direction of the gradient
-    $$ \bm \beta^{(k + 1)} \leftarrow \bm \beta^{(k)} - \alpha \frac{d \L (\bm \beta^{(k)})}{d \bm \beta}$$
-    with $\alpha > 0$ the learning rate. 
-    \item With $\alpha$ too big, method might diverge. With $\alpha$ too small, convergence is slow.
+    $$ \bm w^{(t + 1)} \leftarrow \bm w^{(t)} - \gamma \bm \nabla \L(\bm w^{(t)})$$
+    with $\gamma > 0$ the learning rate. 
+    \item With $\gamma$ too big, method might diverge. With $\gamma$ too small, convergence is slow.
 \end{itemize}
 
 % ========================================================
 
 \subsection{Gradients for MSE}
-\begin{myalign*}
-    \*{\tilde{X}} = [1 \hspace{5 pt} \*X]
-\end{myalign*}
-
 \begin{itemize}
     \item We define the error vector $\* e$:
     \begin{myalign*}
-        \*e = \* y - \*{\tilde{X}} \bm \beta 
+        \*e := \* y - \*{X} \bm w
     \end{myalign*}
     \item and MSE as follows:
     \begin{myalign*}
-        \L(\bm \beta) = \frac{1}{2N} \sum^N_{n = 1} (y_n - \*{\tilde{x}}_n^T \bm \beta)^2 = \frac{1}{2N} \*e^T \*e
+        \L(\bm w) = \frac{1}{2N} \sum^N_{n = 1} (y_n - \*{\tilde{x}}_n^T \bm w)^2 = \frac{1}{2N} \*e^T \*e
     \end{myalign*}
     \item then the gradient is given by
     \begin{myalign*}
-        \frac{d \L}{d \bm \beta} = - \frac{1}{N} \*{\tilde{X}}^T \*e
+        \bm \nabla \L(\bm w) = - \frac{1}{N} \*{X}^T \*e
     \end{myalign*}
 
     \item Optimality conditions:
     \begin{enumerate}
-        \item \textit{necessary}: gradient equal zero: $\frac{d \L(\bm \beta^*)}{d \bm \beta} = 0$
-        \item \textit{sufficient}: Hessian matrix is positive definite: $\* H(\bm \beta^*) = \frac{d^2 \L(\bm \beta^*)}{d \bm \beta d \bm \beta^T}$
+        \item \textit{necessary}: gradient equal zero: $\frac{d \L(\bm w^*)}{d \bm w} = 0$
+        \item \textit{sufficient}: Hessian matrix is positive definite: $\* H(\bm w^*) = \frac{d^2 \L(\bm w^*)}{d \bm w d \bm w^T}$
     \end{enumerate}
 
     \item Very sensitive to illconditioning. Therefore, always normalize your feature otherwise step-size selection is difficult since different directions might move at different speed.
@@ -228,100 +220,126 @@ with $\bm \beta$ the parameters of the model.
 
 % ========================================================
 
-\subsection{Least Squares}
+\subsection{Stochastic Gradient Descent}
+
+In ML, most cost functions are formulated as a sum over the training examples:
+$$ \L(\bm w) = \frac{1}{N}\sum_{n=1}^N\L_n(\bm w)$$
+$\Rightarrow$ SGD algo is given by update rule:
+$$ \bm w^{(t + 1)} \leftarrow \bm w^{(t)} - \gamma \bm \nabla \L_n(\bm w^{(t)})$$
+\emph{Idea}: Cheap but unbiased estimate of grad. $$\E[\bm\nabla\L_n(\bm w)] = \bm \nabla(\bm w)$$
+
+% ========================================================
+
+\subsection{Mini-batch SGD}
+
+Update direction ($B \subseteq [N]$):
+$$\bm g^{(t)} := \frac{1}{|B|} \sum_{n\in B} \bm \nabla \L_n(\bm w^{(t)}) $$ 
+Update rule : $ \bm w^{(t + 1)} \leftarrow \bm w^{(t)} - \gamma \bm g^{(t)}$ 
+
+% ========================================================
+
+\subsection{Subgradients (Non-Smooth OPT)}
+
+A vector $\bm g\in \R^D$ s.t.
+$$ \L(\bm u) \geq \L(\bm w) + \bm g^T(\bm u - \bm w) \quad \forall \bm u $$
+is the subgradient to $\L$ at $\bm w$.
+If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
+% ========================================================
+
+\section{Least Squares}
 \begin{itemize}
     \item In some cases, we can compute the minimum of the cost function analytically.
 
     \item use the first optimality conditions:
     \begin{myalign*}
-        \frac{d \L}{d \bm \beta} = 0 \Rightarrow \*{\tilde{X}}^T \*e = \*{\tilde{X}}^T (\*y - \*{\tilde{X}} \bm \beta)=  0
+        \bm \nabla L(\bm w^*)= 0 \Rightarrow \*X^T \*e = \*X^T (\*y - \*X \bm w)=  0
     \end{myalign*}
-    \item When $\*{\tilde{X}}^T\*{\tilde{X}}$ is invertible, we have the closed-form expression
+    \item When $\*X^T\*X$ is invertible, we have the closed-form expression
     \begin{myalign*}
-        \bm \beta^* = (\*{\tilde{X}}^T\*{\tilde{X}})^{-1} \*{\tilde{X}}^T \*y
+        \bm w^* = (\*X^T\*X)^{-1} \*X^T \*y
     \end{myalign*}
-    \item thus we can predict values for a new $\* x_*$
+    \item thus we can predict values for a new $\* x_m$
     \begin{myalign*}
-        y_* = \*{\tilde{x}^T_*} \bm \beta^* = \*{\tilde{x}^T_*}(\*{\tilde{X}}^T\*{\tilde{X}})^{-1} \*{\tilde{X}}^T \*y
+        y_m := \*{x^T_m} \bm w^* = \*{x^T_m}(\*X^T\*X)^{-1} \*X^T \*y
     \end{myalign*}
-    \item The \textbf{Gram matrix} $\*{\tilde{X}}^T\*{\tilde{X}}$ is positive definite and is also invertible iff $\*{\tilde{X}}$ has full column rank.
+    \item The \textbf{Gram matrix} $\*X^T\*X$ is positive definite and is also invertible iff $\*X$ has full column rank.
     
     \item \textit{Complexity}: $O(ND^2 + D^3) \equiv O(ND^2)$
 
-    \item $\*{\tilde{X}}$ can be rank deficient when $D > N$ or when the comlumns $\*{\bar{x}}_d$ are nearly collinear. In this case, the matrix is ill-conditioned, leading to numerical issues.
+    \item $\*X$ can be rank deficient when $D > N$ or when the comlumns $\*{\bar{x}}_d$ are nearly collinear. In this case, the matrix is ill-conditioned, leading to numerical issues.
 \end{itemize}
 
 % ========================================================
 
-\subsection{Maximum Likelihood}
+\section{Maximum Likelihood}
 \begin{itemize}
     \item Let define our mistakes $\epsilon_n \sim \N(0, \sigma^2)$.
     \begin{myalign*}
-        \rightarrow y_n = \*{\tilde{x}}_n^T \bm \beta + \epsilon_n
+        \rightarrow y_n = \*{x}_n^T \bm w + \epsilon_n
     \end{myalign*}    
     \item Another way of expressing this:
     \begin{myalign*}
-        p(\*y | \*{\tilde{X}, \bm \beta}) &= \prod_{n = 1}^N p(y_n | \*{\tilde{x}}_n, \bm \beta)\\
-        &= \prod_{n = 1}^N \N(y_n | \*{\tilde{x}}_n^T \bm \beta, \sigma^2)
+        p(\*y | \*{X, \bm w}) &= \prod_{n = 1}^N p(y_n | \*{x}_n, \bm w)\\
+        &= \prod_{n = 1}^N \N(y_n | \*{x}_n^T \bm w, \sigma^2)
     \end{myalign*}
-    which defines the likelihood of observating $\* y$ given $\*{\tilde{X}}$ and $\bm \beta$
+    which defines the likelihood of observating $\* y$ given $\*X$ and $\bm w$
     \item Define cost with log-likelihood
     \begin{myalign*}
-        \L_{lik}(\bm \beta) &= \log p(\*y | \*{\tilde{X}}, \bm \beta)\\
-        &= - \frac{1}{2 \sigma^2} \sum^N_{n = 1} (y_n - \*{\tilde{x}}_n^T \bm \beta)^2 + cnst
+        \L_{lik}(\bm w) &= \log p(\*y | \*X, \bm w)\\
+        &= - \frac{1}{2 \sigma^2} \sum^N_{n = 1} (y_n - \*{x}_n^T \bm w)^2 + cnst
     \end{myalign*}
     \item Maximum likelihood estimator (MLE) gives another way to design cost functions
     \begin{myalign*}
-        \argmin_{\bm \beta} \L_{MSE}(\bm \beta) = \argmax_{\bm \beta} \L_{lik}(\bm \beta)
+        \argmin_{\bm w} \L_{MSE}(\bm w) = \argmax_{\bm w} \L_{lik}(\bm w)
     \end{myalign*}
     \item MLE can also be interpreted as finding the model under which the observed data is most likely to have been generated from.
     \item With Laplace distribution
     \begin{myalign*}
-        p(y_n | \*{\tilde{x}}_n, \bm \beta) = \frac{1}{2b} e^{-\frac{1}{b}|y_n - \*{\tilde{x}}_n^T \bm \beta|}
+        p(y_n | \*{x}_n, \bm w) = \frac{1}{2b} e^{-\frac{1}{b}|y_n - \*{x}_n^T \bm w|}
     \end{myalign*}
     \begin{myalign*}
-        \sum_n \log p(y_n | \*{\tilde{x}}_n, \bm \beta) = \sum_n |y_n - \*{\tilde{x}}_n^T \bm \beta| + cnst
+        \sum_n \log p(y_n | \*{x}_n, \bm w) = \sum_n |y_n - \*{x}_n^T \bm w| + cnst
     \end{myalign*}
 
 \end{itemize}
 
 % ========================================================
 
-\subsection{Ridge Regression}
+\section{Ridge Regression}
 \begin{itemize}
     \item Linear models usually underfit. One way is to use nonlinear basis functions instead.
     \begin{myalign*}
-        y_n = \beta_0 + \sum_{j = 1}^M \beta_j \phi_j(\*x_n) = \bm{\tilde{\phi}}(\*x_n)^T \bm \beta
+        y_n = w_0 + \sum_{j = 1}^M w_j \phi_j(\*x_n) = \bm{\tilde{\phi}}(\*x_n)^T \bm w
     \end{myalign*}
-    \item This model is linear in $\bm \beta$ but nonlinear in $\*x$. Note that the dimensionality is now M, not D.
+    \item This model is linear in $\bm w$ but nonlinear in $\*x$. Note that the dimensionality is now M, not D.
     \item Polynomial basis
     \begin{myalign*}
         \bm \phi(x_n) = [1, x_n , x_n^2 , ..., x_n^M]
     \end{myalign*}
     \item The least square solution becomes
     \begin{myalign*}
-        \bm \beta^*_{lse} = (\bm{\tilde{\Phi}}^T\bm{\tilde{\Phi}})^{-1}\bm{\tilde{\Phi}}^T \*y
+        \bm w^*_{lse} = (\bm{\tilde{\Phi}}^T\bm{\tilde{\Phi}})^{-1}\bm{\tilde{\Phi}}^T \*y
     \end{myalign*}
 
     \item Complex models overfit easily. Thus we can choose simpler models by adding a \textbf{regularization term} which penalizes complex models
     \begin{myalign*}
-        \min_{\bm \beta} 
+        \min_{\bm w} 
         \left( 
-        	\L(\bm \beta) + \frac{\lambda}{2N} \sum^M_{j = 1} \beta_j^2 
+        	\L(\bm w) + \frac{\lambda}{2N} \sum^M_{j = 1} w_j^2 
         \right)
     \end{myalign*}
 
     \begin{myalign*}
-        \bm \beta^* = \argmin_{\bm \beta} 
+        \bm w^* = \argmin_{\bm w} 
         \left(
-        	\frac{1}{2}(\*y - \*X \bm \beta)^T(\*y - \*X \bm \beta) + \frac{\lambda}{2} \bm \beta^T \bm \beta
+        	\frac{1}{2}(\*y - \*X \bm w)^T(\*y - \*X \bm w) + \frac{\lambda}{2} \bm w^T \bm w
         \right)
     \end{myalign*}
 
-    \item Note that $\beta_0$ is not penalized.
+    \item Note that $w_0$ is not penalized.
     \item By differentiating and setting to zero we get
     \begin{myalign*}
-        \bm \beta_{ridge} = (\bm{\tilde{\Phi}}^T\bm{\tilde{\Phi}} + \bm{\Lambda})^{-1} \bm{\tilde{\Phi}}^T \*y
+        \bm w_{ridge} = (\bm{\tilde{\Phi}}^T\bm{\tilde{\Phi}} + \bm{\Lambda})^{-1} \bm{\tilde{\Phi}}^T \*y
     \end{myalign*}
     \begin{myalign*}
         \bm{\Lambda} = 
@@ -338,30 +356,31 @@ with $\bm \beta$ the parameters of the model.
 	     \begin{itemize}
 	     	\item Maximizes the product of the likelihood \textit{and} the \textbf{prior}.
 	     	\begin{myalign*}
-	     	     \bm \beta_{MAP} = \argmax_{\bm \beta} 
+	     	     \bm w_{MAP} = \argmax_{\bm w} 
 	     	     \left(
-	     	     	p(\*y | \*X, \bm \Lambda)p(\bm \beta | \bm \Sigma)
+	     	     	p(\*y | \*X, \bm \Lambda)p(\bm w | \bm \Sigma)
 	     	     \right)
 	     	 \end{myalign*} 
-	     	\item Assume $\beta_0 = 0$
+	     	\item Assume $w_0 = 0$
 	     	\begin{myalign*}
-	     	    \bm \beta_{ridge} = \argmax_{\bm \beta}
+	     	    \bm w_{ridge} = \argmax_{\bm w}
 	     	    \left(
 		     	    \log 
 		     	    \left[
-		     	    	\prod_{n = 1}^N \N(y_n | \*x^T_n \bm \beta, \bm \Lambda) \times \N(\bm \beta | 0, \*I)
+		     	    	\prod_{n = 1}^N \N(y_n | \*x^T_n \bm w, \bm \Lambda) \times \N(\bm w | 0, \*I)
 		     	    \right]
 		     	\right)
 	     	\end{myalign*}
 	     \end{itemize}
-	\item \textbf{Lasso regularizer} forces some $\beta_i$ to be strictly 0 and therefore forces sparsity in the model.
+	\item \textbf{Lasso regularizer} forces some $w_i$ to be strictly 0 and therefore forces sparsity in the model.
 	\begin{myalign*}
-	    \min_{\bm \beta} \frac{1}{2 N} \sum_{n = 1}^N(y_n - \bm{\tilde{\phi}}(\*x_n)^T \bm \beta)^2, \hspace{10pt} \text{ such that } \sum_{i = 1}^M |\beta_i| \leq \tau
+	    \min_{\bm w} \frac{1}{2 N} \sum_{n = 1}^N(y_n - \bm{\tilde{\phi}}(\*x_n)^T \bm w)^2, \hspace{10pt} \\\text{ such that } \sum_{i = 1}^M |w_i| \leq \tau
 	\end{myalign*}
 \end{itemize}
+
 % ========================================================
 
-\subsection{Cross-Validation}
+\section{Cross-Validation}
 \begin{itemize}
 	\item We should choose $\lambda$ to minimize the mistakes that will be made in the future.
 	\item We split the data into train and validation sets and we pretend that the validation set is the future data. We fit our model on the training set and compute a prediction-error on the validation set. This gives us an \textit{estimate} of the \textit{generalization error}.
@@ -370,7 +389,7 @@ with $\bm \beta$ the parameters of the model.
 \end{itemize}
 % ========================================================
 
-\subsection{Bias-Variance decomposition}
+\section{Bias-Variance decomposition}
 \begin{itemize}
 	\item The expected test error can be expressed as the sum of two terms
 	\begin{itemize}
@@ -391,7 +410,7 @@ with $\bm \beta$ the parameters of the model.
 \end{itemize}
 % ========================================================
 
-\subsection{Logistic Regression}
+\section{Logistic Regression}
 
 % ========================================================
 \begin{itemize}
@@ -412,18 +431,18 @@ with $\bm \beta$ the parameters of the model.
 	    \sigma(x) = \frac{\exp(x)}{1 + \exp(x)}
 	\end{myalign*}
 	\begin{myalign*}
-	    p(y_n = \*C_1| \*x_n) = \sigma(\tilde{\*x}^T \bm \beta)\\
-	    p(y_n = \*C_2 | \*x_n) = 1 - \sigma(\tilde{\*x}^T \bm \beta)
+	    p(y_n = \*C_1| \*x_n) = \sigma(\tilde{\*x}^T \bm w)\\
+	    p(y_n = \*C_2 | \*x_n) = 1 - \sigma(\tilde{\*x}^T \bm w)
 	\end{myalign*}
 	\item The probabilistic model:
 	\begin{myalign*}
-	    p(\*y | \*X, \bm \beta) = \prod_{n = 1}^N \sigma(\tilde{\*x}_n^T \bm \beta)^{y_n}(1 - \sigma(\tilde{\*x}_n^T \bm \beta))^{1 - y_n}
+	    p(\*y | \*X, \bm w) = \prod_{n = 1}^N \sigma(\tilde{\*x}_n^T \bm w)^{y_n}(1 - \sigma(\tilde{\*x}_n^T \bm w))^{1 - y_n}
 	\end{myalign*}
 	\item The log-likelihood:
 	\begin{myalign*}
-	    \L_{MLE}(\bm \beta) = \sum_{n = 1}^N
+	    \L_{MLE}(\bm w) = \sum_{n = 1}^N
 	    \left(
-	    	y_n \tilde{\*x}_n^T \bm \beta - \log(1 + \exp(\tilde{\*x}_n^T \bm \beta))
+	    	y_n \tilde{\*x}_n^T \bm w - \log(1 + \exp(\tilde{\*x}_n^T \bm w))
 	    \right)
 	\end{myalign*}
 	\item We can use the fact that
@@ -432,13 +451,13 @@ with $\bm \beta$ the parameters of the model.
 	\end{myalign*}
 	\item Gradient of the log-likelihood %LEARN
 	\begin{myalign*}
-	    \*g = \frac{d \L}{d \bm \beta} &= \sum_{n = 1}^N 
+	    \*g = \frac{d \L}{d \bm w} &= \sum_{n = 1}^N 
 	    \left( 
-	    	\tilde{\*x}_n y_n - \tilde{\*x}_n \sigma(\tilde{\*x}_n^T \bm \beta)
+	    	\tilde{\*x}_n y_n - \tilde{\*x}_n \sigma(\tilde{\*x}_n^T \bm w)
 	    	\right) \\
-	    &= - \*{\tilde{X}}^T[\sigma(\*{\tilde{X}} \bm \beta) - \*y]
+	    &= - \*X^T[\sigma(\*X \bm w) - \*y]
 	\end{myalign*}
-	\item The negative of the log-likelihood $- \L_{mle}(\bm \beta)$ is convex
+	\item The negative of the log-likelihood $- \L_{mle}(\bm w)$ is convex
 	\item \textbf{Hessian} of the log-likelihood
 	\begin{itemize}
 		\item We know that
@@ -447,13 +466,13 @@ with $\bm \beta$ the parameters of the model.
 		\end{myalign*}
 		\item Hessian is the derivative of the gradient
 		\begin{myalign*}
-		    \*H(\bm \beta) &= - \frac{d \*g(\bm \beta)}{d \bm \beta^T}  = \sum_{n = 1}^N \frac{d}{d \bm \beta^T} \sigma(\tilde{\*x}_n^T \bm \beta) \tilde{\*x}_n\\
-		    &= \sum_{n = 1}^N \tilde{\*x}_n \sigma(\tilde{\*x}_n^T \bm \beta)(1 - \sigma(\tilde{\*x}_n^T \bm \beta)) \tilde{\*x}_n^T\\
+		    \*H(\bm w) &= - \frac{d \*g(\bm w)}{d \bm w^T}  = \sum_{n = 1}^N \frac{d}{d \bm w^T} \sigma(\tilde{\*x}_n^T \bm w) \tilde{\*x}_n\\
+		    &= \sum_{n = 1}^N \tilde{\*x}_n \sigma(\tilde{\*x}_n^T \bm w)(1 - \sigma(\tilde{\*x}_n^T \bm w)) \tilde{\*x}_n^T\\
 		    &= \tilde{\*X}^T \*S \tilde{\*X}
 		\end{myalign*}
 		where $\*S$ is a $N \times N$ diagonal matrix with diagonals
 		\begin{myalign*}
-		    S_{nn} = \sigma(\tilde{\*x}_n^T \bm \beta)(1 - \sigma(\tilde{\*x}_n^T \bm \beta))
+		    S_{nn} = \sigma(\tilde{\*x}_n^T \bm w)(1 - \sigma(\tilde{\*x}_n^T \bm w))
 		\end{myalign*}
 		\item The negative of the log-likelihood is not strictly convex.
 	\end{itemize}
@@ -461,20 +480,20 @@ with $\bm \beta$ the parameters of the model.
 	\begin{itemize}
 		\item Uses second-order information and takes steps in the direction that minimizes a quadratic approximation
 		\begin{myalign*}
-		    \L(\bm \beta) = \L(\bm \beta^{(k)}) + \*g_k^T (\bm \beta - \bm \beta^{(k)})\\ + (\bm \beta - \bm \beta^{(k)})^T \*H_k(\bm \beta - \bm \beta^{(k)})
+		    \L(\bm w) = \L(\bm w^{(k)}) + \*g_k^T (\bm w - \bm w^{(k)})\\ + (\bm w - \bm w^{(k)})^T \*H_k(\bm w - \bm w^{(k)})
 		\end{myalign*}
 		and it's minimum is at
 		\begin{myalign*}
-		    \bm \beta^{k + 1} = \bm \beta^{(k)} - \alpha_k \*H_k^{-1}\*g_k
+		    \bm w^{k + 1} = \bm w^{(k)} - \alpha_k \*H_k^{-1}\*g_k
 		\end{myalign*}
 		where $\*g_k$ is the gradient and $\alpha_k$ the learning rate.
 		\item Complexity: $O((ND^2 + D^3)I)$
 	\end{itemize}
 	\item \textbf{Penalized Logistic Regression}
 	\begin{myalign*}
-	    \min_{\bm \beta} 
+	    \min_{\bm w} 
 	    \left(
-	    	- \sum_{n = 1}^N \log p(y_n | \*x_n^T \bm \beta) + \lambda \sum_{d = 1}^D \beta^2_d
+	    	- \sum_{n = 1}^N \log p(y_n | \*x_n^T \bm w) + \lambda \sum_{d = 1}^D w^2_d
 	    \right)
 	\end{myalign*}
 \end{itemize}
@@ -509,12 +528,12 @@ with $\bm \beta$ the parameters of the model.
 	\item $A(\eta)$ is convex
 	\item The generalized maximum likelihood cost to minimize is
 	\begin{myalign*}
-	    \min_{\bm \beta} \L(\bm \beta) = - \sum_{n = 1}^N \log(p(y_n | \tilde{\*x}^T_n \bm \beta))
+	    \min_{\bm w} \L(\bm w) = - \sum_{n = 1}^N \log(p(y_n | \tilde{\*x}^T_n \bm w))
 	\end{myalign*}
-	where $p(y_n | \tilde{\*x}^T_n \bm \beta)$ is an exponential family distribution
+	where $p(y_n | \tilde{\*x}^T_n \bm w)$ is an exponential family distribution
 	\item We obtain the solution
 	\begin{myalign*}
-	    \frac{d \L}{d \bm \beta} = \tilde{\*X}^T[\*g^{-1}(\bm \eta) - \bm \phi(\*y)]
+	    \frac{d \L}{d \bm w} = \tilde{\*X}^T[\*g^{-1}(\bm \eta) - \bm \phi(\*y)]
 	\end{myalign*}
 \end{itemize}
 
@@ -537,13 +556,13 @@ with $\bm \beta$ the parameters of the model.
 \begin{itemize}
 	\item The following is true for ridge regression
 	\begin{align}
-	    \bm \beta &= (\*X^T \*X + \lambda \*I_D)^{-1} \*X^T \*y \\
+	    \bm w &= (\*X^T \*X + \lambda \*I_D)^{-1} \*X^T \*y \\
 	    &= \*X^T(\*X\*X^T + \lambda \*I_N)^{-1} \*y = \*X^T \bm \alpha \nonumber
 	\end{align}
-	\item Complexity of computing $\bm \beta$: (1) $O(D^2 N + D^3)$, (2) $O(D N^2 + N^3)$
+	\item Complexity of computing $\bm w$: (1) $O(D^2 N + D^3)$, (2) $O(D N^2 + N^3)$
 	\item Thus we have
 	\begin{myalign*}
-	    \bm \beta = \sum_{n = 1}^N \alpha_n \*x_n, \hspace{5pt} \*y = \sum_{d = 1}^D \beta_d \*{\bar{x}}_d
+	    \bm w = \sum_{n = 1}^N \alpha_n \*x_n, \hspace{5pt} \*y = \sum_{d = 1}^D w_d \*{\bar{x}}_d
 	\end{myalign*}
 	with $\*x_n$ the rows of $\*X$ and $\*{\bar{x}}_d$ the columns of $\*X$ 
 	\item The representer theorem allows us to write an equivalent optimization problem în terms of $\bm \alpha$.
@@ -579,7 +598,7 @@ with $\bm \beta$ the parameters of the model.
 	\end{itemize}
 	\item Thus we get
 	\begin{myalign*}
-	    \*y = \bm \beta^T \*x = \sum_{i = 1}^K \alpha_i \*x_i^T \*x = \sum_{i = 1}^K \alpha_i k(\*x, \*x_i) 
+	    \*y = \bm w^T \*x = \sum_{i = 1}^K \alpha_i \*x_i^T \*x = \sum_{i = 1}^K \alpha_i k(\*x, \*x_i) 
 	\end{myalign*}
 \end{itemize}
 
@@ -597,15 +616,15 @@ with $\bm \beta$ the parameters of the model.
 	\item Assume $y_n \in \{-1, 1\}$
 	\item SVM optimizes the following cost
 	\begin{myalign*}
-	    g(\bm \beta) = \min_{\bm \beta} \sum_{n = 1}^N [1 - y_n \tilde{\bm \phi}_n^T \bm \beta]_+ + \frac{\lambda}{2} \sum_{j = 1}^M \beta^2_j
+	    g(\bm w) = \min_{\bm w} \sum_{n = 1}^N [1 - y_n \tilde{\bm \phi}_n^T \bm w]_+ + \frac{\lambda}{2} \sum_{j = 1}^M w^2_j
 	\end{myalign*}
-	\item Minimum doesn't change with a rescaling of $\bm \beta$
+	\item Minimum doesn't change with a rescaling of $\bm w$
 	\item choose the hyperplane so that the distance from it to the nearest data point on each side is maximized
 	\item \textbf{Duality}:
 	\begin{itemize}
-		\item Hard to minimize $g(\bm \beta)$ so we define
+		\item Hard to minimize $g(\bm w)$ so we define
 		\begin{myalign*}
-		    g(\bm \beta) = \max_{\bm \alpha} G(\bm \beta, \bm \alpha)
+		    g(\bm w) = \max_{\bm \alpha} G(\bm w, \bm \alpha)
 		\end{myalign*}
 		\item we use the property that
 		\begin{myalign*}
@@ -613,33 +632,33 @@ with $\bm \beta$ the parameters of the model.
 		\end{myalign*}
 		\item We can rewrite the problem as
 		\begin{myalign*}
-		    \min_{\bm \beta} \max_{\bm \alpha \in [0, C]^N} \sum_{n = 1}^N \alpha_n (1 - y_n \tilde{\bm \phi}_n^T \bm \beta) + \frac{1}{2} \sum_{j = 1}^M \beta_j^2
+		    \min_{\bm w} \max_{\bm \alpha \in [0, C]^N} \sum_{n = 1}^N \alpha_n (1 - y_n \tilde{\bm \phi}_n^T \bm w) + \frac{1}{2} \sum_{j = 1}^M w_j^2
 		\end{myalign*}
-		\item This is differentiable, convex in $\bm \beta$ and concave in $\bm \alpha$
+		\item This is differentiable, convex in $\bm w$ and concave in $\bm \alpha$
 		\item \textbf{Minimax theorem}: 
 		\begin{myalign*}
-		    \min_{\bm \beta} \max_{\bm \alpha} G(\bm \beta, \bm \alpha) = \max_{\bm \alpha} \min_{\bm \beta} G(\bm \beta, \bm \alpha)
+		    \min_{\bm w} \max_{\bm \alpha} G(\bm w, \bm \alpha) = \max_{\bm \alpha} \min_{\bm w} G(\bm w, \bm \alpha)
 		\end{myalign*}
-		because $G$ is convex in $\bm \beta$ and concave in $\bm \alpha$.
-		\item Derivative w.r.t. $\bm \beta$:
+		because $G$ is convex in $\bm w$ and concave in $\bm \alpha$.
+		\item Derivative w.r.t. $\bm w$:
 		\begin{myalign*}
-		    \frac{d G}{d \bm \beta} = - 
+		    \frac{d G}{d \bm w} = - 
 		    \left(
 		    	\sum_{n = 1}^N \alpha y_n \tilde{\phi_n}
 		    \right)
 		    + 
 		    \left[
 		    	\begin{array}{c}
-		    		0 \\ \bm \beta_{1 : M}
+		    		0 \\ \bm w_{1 : M}
 		    	\end{array}
 		    \right]
 		\end{myalign*}
 		\item Equating this to 0, we get:
 			\begin{myalign*}
-			    &\bm \beta^*_{1 : M} = \sum^N_{n = 1} \alpha_n y_n \phi_n = \bm \Phi^T \text{diag}(\*y) \bm \alpha\\
+			    &\bm w^*_{1 : M} = \sum^N_{n = 1} \alpha_n y_n \phi_n = \bm \Phi^T \text{diag}(\*y) \bm \alpha\\
 			    &\bm \alpha^T \*y = 0
 			\end{myalign*}
-		\item Plugging $\bm \beta^*$ back in the dual problem
+		\item Plugging $\bm w^*$ back in the dual problem
 		\begin{myalign*}
 		    \max_{\bm \alpha \in [0, C]^N} \bm \alpha^T \*1 - \frac{1}{2} \bm \alpha^T \*Y \bm \Phi \bm \Phi \* Y \bm \alpha
 		\end{myalign*}
@@ -874,7 +893,7 @@ such that columns of $\*W$ are orthogonal.
     \begin{myalign*}
         m_{i \rightarrow j}(\* S_{i,j}) = \sum_{\*C_i - \* S_{i,j}} \psi_i \times \prod_{k \in (\N_i - {j})} m_{k \rightarrow i}
     \end{myalign*}
-    \item Belief: $\beta_i(\*C_i) = \psi_i \times \prod_{k \in \N_i} \delta_{k \rightarrow i}$
+    \item Belief: $w_i(\*C_i) = \psi_i \times \prod_{k \in \N_i} \delta_{k \rightarrow i}$
 \end{itemize}
 
 % ========================================================
@@ -887,18 +906,18 @@ such that columns of $\*W$ are orthogonal.
     \item $\*a_n^{(k)}$ is the corresponding activation
     \item There are a total of $K$ layers
     \begin{myalign*}
-        a_{mn}^{(k)} = (\bm \beta_m^{(k)})^T \*z_n^{(k - 1)}, \hspace{8pt} z_{mn}^{(k)} = h (a_{mn}^{(k)})
+        a_{mn}^{(k)} = (\bm w_m^{(k)})^T \*z_n^{(k - 1)}, \hspace{8pt} z_{mn}^{(k)} = h (a_{mn}^{(k)})
     \end{myalign*}
     \item For the first layer we have $\*z_n^{(0)} = \*x_n$
     \item For the last layer, we use a link function to map $\*z_n^{(K - 1)}$ to the output $\*y_n$
     \item A 1-layer MLP is simply a generalization of linear/logistic regression
-    \item $\*B^{(k)}$ a matrix with rows $(\bm \beta_m^{(k)})^T$
+    \item $\*B^{(k)}$ a matrix with rows $(\bm w_m^{(k)})^T$
     \begin{myalign*}
         \*a_n^{(k)} = \* B^{(k)} \*z_n^{(k - 1)}, \hspace{8pt} \*z_n^{(k)} = h (\*a_n^{(k)})
     \end{myalign*}
     \item thus we have the input-output relationship
     \begin{myalign*}
-        \hat{y}_n = g((\bm \beta^{(K - 1)})^T * h(\*B^{(K - 2)} * h(* ... * h(\*B^{(1)} * \*x_n)))
+        \hat{y}_n = g((\bm w^{(K - 1)})^T * h(\*B^{(K - 2)} * h(* ... * h(\*B^{(1)} * \*x_n)))
     \end{myalign*}
     with $g()$ the link function
     \item We learn parameters $\*B$ using stochastic gradient-descent
