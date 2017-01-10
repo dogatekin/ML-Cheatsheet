@@ -362,16 +362,18 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	     	     \right)
 	     	 \end{myalign*} 
 	     	\item Assume $w_0 = 0$
-	     	\begin{myalign*}
-	     	    \bm w_{ridge} = \argmax_{\bm w}
-	     	    \left(
-		     	    \log 
-		     	    \left[
-		     	    	\prod_{n = 1}^N \N(y_n | \*x^T_n \bm w, \bm \Lambda) \times \N(\bm w | 0, \*I)
-		     	    \right]
-		     	\right)
-	     	\end{myalign*}
-	     \end{itemize}
+	     	\end{itemize}
+	     	\end{itemize}
+$$
+    \bm w_{ridge} = \argmax_{\bm w}
+    \left(
+	    \log 
+	    \left[
+		\prod_{n = 1}^N \N(y_n | \*x^T_n \bm w, \bm \Lambda) \times \N(\bm w | 0, \*I)
+	    \right]
+	\right)
+$$
+	\begin{itemize}
 	\item \textbf{Lasso regularizer} forces some $w_i$ to be strictly 0 and therefore forces sparsity in the model.
 	\begin{myalign*}
 	    \min_{\bm w} \frac{1}{2 N} \sum_{n = 1}^N(y_n - \bm{\tilde{\phi}}(\*x_n)^T \bm w)^2, \hspace{10pt} \\\text{ such that } \sum_{i = 1}^M |w_i| \leq \tau
@@ -664,15 +666,15 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	\item \textbf{Unsupervised learning}: Represent particular input patterns in a way that reflects the statistical structure of the overall collections of input partterns.
 	\item \textbf{Cluster} are groups of points whose inter-point distances are small compared to the distances outside the cluster.
 	\begin{myalign*}
-	    \min_{\*r, \bm \mu} \L(\*r, \bm \mu) = \sum_{k = 1}^K \sum_{n = 1}^N r_{nk} ||\*x_n - \bm \mu_k||^2_2
+	    \min_{\*z, \bm \mu} \L(\*z, \bm \mu) = \sum_{k = 1}^K \sum_{n = 1}^N z_{nk} ||\*x_n - \bm \mu_k||^2_2
 	\end{myalign*}
-	such that $r_{nk} \in \{0, 1\}$ and $\sum_{k = 1}^K r_{nk} = 1$
-	\item K-means algorithm: \\
+	such that $z_{nk} \in \{0, 1\}$ and $\sum_{k = 1}^K z_{nk} = 1$
+	\item K-means algorithm (Coordinate Descent): \\
 	Initialize $\bm \mu_k$, then iterate
 	\begin{enumerate}
-		\item For all n, compute $\*r_n$ given $\bm \mu$
+		\item For all n, compute $\*z_n$ given $\bm \mu$
 		\begin{myalign*}
-		    r_{nk} = 
+		    z_{nk} = 
 		    \left\{
 		    	\begin{array}{c c}
 		    		1 & \text{ if } k = \argmin_j || \*x_n - \bm \mu ||^2_2\\
@@ -680,20 +682,23 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 		    	\end{array}
 		    \right.
 		\end{myalign*}
-		\item For all $k$, compute $\mu_k$ given $\*r$
+		\item For all $k$, compute $\mu_k$ given $\*z$
 		\begin{myalign*}
-		    \bm \mu_k = \frac{\sum_{n = 1}^N r_{nk} \*x_n}{\sum_{n = 1}^N r_{nk}}
+		    \bm \mu_k = \frac{\sum_{n = 1}^N z_{nk} \*x_n}{\sum_{n = 1}^N z_{nk}}
 		\end{myalign*}
 	\end{enumerate}
 	\item A good initialization procedure is to choose the prototypes to be equal to a random subset of $K$ data points.
 	\item Probabilistic model
 	\begin{myalign*}
-	    p(\*r, \bm \mu) = \prod_{n = 1}^N \prod_{k = 1}^K 
+	    p(\*z, \bm \mu) = \prod_{n = 1}^N \prod_{k = 1}^K 
 	    \left[
 	    	\N(\*x_n | \bm \mu_k, \*I)
-	    \right]^{r_{nk}}
+	    \right]^{z_{nk}}
 	\end{myalign*}
-
+	\item K-means as a Matrix Factorization
+	\begin{myalign*}
+	 \min_{\*z, \bm \mu} \L(\*z, \bm \mu) = ||\*X - \*M\*Z^T||_{\text{Frob}}^2
+	\end{myalign*}
 	\item Computation can be heavy, each example can belong to only on cluster and clusters have to be spherical.
 \end{itemize}
 
@@ -701,38 +706,32 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 
 \section{Gaussian Mixture Models}
 \begin{itemize}
-	\item Clusters can be spherical using a full covariance matrix instead of isotropic covariance.
+	\item Clusters can be elliptical using a full covariance matrix instead of isotropic covariance.
 	\begin{myalign*}
-	    p(\*X | \bm \mu, \bm \Sigma, \*r) = \prod_{n = 1}^N \prod_{k = 1}^K 
+	    p(\*X | \bm \mu, \bm \Sigma, \*z) = \prod_{n = 1}^N \prod_{k = 1}^K 
 		    \left[
 		    	\N(\*x_n | \bm \mu_k, \* \bm \Sigma_k)
-		    \right]^{r_{nk}}
+		    \right]^{z_{nk}}
 	\end{myalign*}
 
-	\item \textbf{Soft-clustering}: Points can belong to several cluster by defining $r_n$ to be a random variable.
+	\item \textbf{Soft-clustering}: Points can belong to several cluster by defining $z_n$ to be a random variable.
 	\begin{myalign*}
-		p(r_{nk} = 1) &= \pi_k \text{ where } \pi_k > 0, \forall k, %LEARN
+		p(z_{n} = k) &= \pi_k \text{ where } \pi_k > 0, \forall k, %LEARN
 		\sum_{k = 1}^K \pi_k = 1
 	\end{myalign*}
-
 	\item Joint distribution of Gaussian mixture model
 	\begin{myalign*}
-	    p(\*X, \*r | \bm \mu, \bm \Sigma, \bm \pi)
-	    &= \prod_{n = 1}^N
-	    \left[
-	    	p(\*x_n | \*r_n, \bm \mu, \bm \Sigma) p(\*r_n | \bm \pi)
-	    \right]\\
-	    &=
-	    \left[
-	    	\prod_{k = 1}^K [(\N(\*x_n |\bm \mu_k, \bm \Sigma_k))^{r_{nk}}] \prod_{k = 1}^K [\pi]^{r_{nk}}
-	    \right]
+	    p(\*X, \*z | \bm \mu, \bm \Sigma, \bm \pi)
+	    = \prod_{n = 1}^N
+	    	p(\*x_n | \*r_n, \bm \mu, \bm \Sigma) p(\*z_n | \bm \pi) \\
+	    = \prod_{n=1}^N \prod_{k = 1}^K [(\N(\*x_n |\bm \mu_k, \bm \Sigma_k))^{z_{nk}}] \prod_{k = 1}^K [\pi]^{z_{nk}}
 	\end{myalign*}
-	\item $r_n$ are called \textit{latent} unobserved variables
+	\item $z_n$ are called \textit{latent} unobserved variables
 	\item Unknown parameters are given by $ \bm \theta = \{\bm \mu, \bm \Sigma, \bm \pi\}$
-	\item We get the \textbf{marginal likelihood} by marginalizing $r_n$ out from the likelihood
+	\item We get the \textbf{marginal likelihood} by marginalizing $z_n$ out from the likelihood
 	\begin{myalign*}
-	    p(\*x_n | \bm \theta) &= \sum_{k = 1}^K p(\*x_n, r_{nk} = 1 | \bm \theta)\\
-	    &= \sum_{k = 1}^K p(r_{nk} = 1 | \bm \theta) p(\*x_n | r_{nk} = 1, \bm \theta)\\
+	    p(\*x_n | \bm \theta) &= \sum_{k = 1}^K p(\*x_n, z_{n} = k | \bm \theta)\\
+	    &= \sum_{k = 1}^K p(z_{n} = k | \bm \theta) p(\*x_n | z_{n} = k, \bm \theta)\\
 	    &= \sum_{k = 1}^K \pi_k \N(\*x_n | \bm \mu_k, \bm \Sigma_k)
 	\end{myalign*}
 	\item Without a latent variable model, number of parameters grow at rate $O(N)$
@@ -751,7 +750,7 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 \begin{itemize}
 	\item \textit{[ALGORITHM]} Start with $\bm \theta^{(1)}$ and iterate
 	\begin{enumerate}
-		\item \textit{Expectation step}: Compute a lower bound to the cost such that it is tight at the previous $\bm \theta^{(i)}$
+		\item \textit{Expectation step}: Compute a lower bound to the cost such that it is tight at the previous $\bm \theta^{(t)}$
 		\begin{comment}
 		\begin{myalign*}
 		    \log \sum_{k = 1}^K \pi_k \N(\*x_n | \bm \mu_k, \bm \Sigma_k) \geq \sum_{k = 1}^K \gamma(r_{nk}) \log \frac{\pi_k \N(\*x_n | \bm \mu_k, \bm \Sigma_k)}{\gamma(r_{nk})}
@@ -759,23 +758,23 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 		\end{comment}
 		with equality when,
 		\begin{myalign*}
-		    \gamma(r_{nk}) = \frac{\pi_k \N(\*x_n| \bm \mu_k, \bm \Sigma_k)}{\sum_{k = 1}^K \pi_k \N(\*x_n | \bm \mu_k, \bm \Sigma_k)}
+		    q_{kn} = \frac{\pi_k \N(\*x_n| \bm \mu_k, \bm \Sigma_k)}{\sum_{k = 1}^K \pi_k \N(\*x_n | \bm \mu_k, \bm \Sigma_k)}
 		\end{myalign*}
 		\item \textit{Maximization step}: Update $\bm \theta$
 		\begin{myalign*}
-		    \bm \theta^{(i + 1)} = \argmax_{\bm \theta} \L(\bm \theta, \bm \theta^{(i)})
+		    \bm \theta^{(t + 1)} = \argmax_{\bm \theta} \L(\bm \theta, \bm \theta^{(t)})
 		\end{myalign*}
 
 		\begin{myalign*}
-		    \bm \mu_k^{(i + 1)} = \frac{\sum_{n = 1}^N \gamma^{(i)}(r_{nk}) \*x_n}{\sum_{n = 1}^N \gamma^{(i)}(r_{nk})}
+		    \bm \mu_k^{(t + 1)} = \frac{\sum_{n = 1}^N \gamma^{(i)}(r_{nk}) \*x_n}{\sum_{n = 1}^N q_{kn}^{(t)}}
 		\end{myalign*}
 
 		\begin{myalign*}
-		    \bm\Sigma_k^{(i + 1)} = \frac{\sum_{n = 1}^N \gamma^{(i)}(r_{nk}) (\*x_n - \bm \mu_k^{(i + 1)})(\*x_n - \bm \mu_k^{(i + 1)})^T}{\sum_{n = 1}^N \gamma^{(i)}(r_{nk})}
+		    \bm\Sigma_k^{(t + 1)} = \frac{\sum_{n = 1}^N q_{kn}^{(t)} (\*x_n - \bm \mu_k^{(t + 1)})(\*x_n - \bm \mu_k^{(t + 1)})^T}{\sum_{n = 1}^N q_{kn}^{(t)})}
 		\end{myalign*}
 
 		\begin{myalign*}
-		    \pi_k^{(i + 1)} = \frac{1}{N} \sum_{n = 1}^N \gamma^{(i)}(r_{nk})
+		    \pi_k^{(t + 1)} = \frac{1}{N} \sum_{n = 1}^N q_{kn}^{(t)}
 		\end{myalign*}
 	\end{enumerate}
 	\item If covariance is diagonal $\rightarrow$ K-means.
@@ -790,32 +789,32 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	\item We project data vectors $\*x_n$ to a smaller dimension $\*z_n \in \Bbb R^M$
 	\item We have now 2 latent variables:
 	\begin{itemize}
-		\item $\*Z$ a $N \times M$ matrix that gives features for the users
-	 	\item $\*W$ a $D \times M$ matrix that gives features for the movies
+		\item $\*Z$ a $N \times K$ matrix that gives features for the users
+	 	\item $\*W$ a $D \times K$ matrix that gives features for the movies
 	 \end{itemize} 
 	 \begin{myalign*}
 	     x_{dn} \approx \*w_d^T\*z_n
 	 \end{myalign*}
 	 \item We can add a regularizer and minimize the following cost:
 	 \begin{myalign*}
-	     \L(\*W, \*Z) = \frac{1}{2} \sum_{n = 1}^N \sum_{d = 1}^D (x_{dn} - \*w_d^T \*z_n)^2 \\ + \frac{\lambda_w}{2} \sum_{d = 1}^D \*w_d^T\*w_d + \frac{\lambda_z}{2} \sum_{n = 1}^N \*z_n^T \*z_n
+	     \L(\*W, \*Z) = \frac{1}{2}\sum_{(d,n)\in\Omega} [x_{dn} - (\*W\*Z^T)_{dn}]^2 \\ + \frac{\lambda_w}{2} \sum_{d = 1}^D \*w_d^T\*w_d + \frac{\lambda_z}{2} \sum_{n = 1}^N \*z_n^T \*z_n
 	 \end{myalign*}
 	 \item We can use coordinate descent algorithm, by first minimizing w.r.t. $\*Z$ given $\*W$ and then minimizing $\*W$ given $\*Z$. This is called \textbf{Alternating least-squares (ALS)}:
 	 \begin{myalign*}
-	     \*Z^T &\leftarrow (\*W^T \*W + \lambda_z \*I_M)^{-1} \*W^T \*X \\
-	     \*W^T &\leftarrow (\*Z^T \*Z + \lambda_w \*I_M)^{-1} \*Z^T\*X^T
+	     \*Z^T &\leftarrow (\*W^T \*W + \lambda_z \*I_K)^{-1} \*W^T \*X \\
+	     \*W^T &\leftarrow (\*Z^T \*Z + \lambda_w \*I_K)^{-1} \*Z^T\*X^T
 	 \end{myalign*}
-	 \item \textit{Complexity}: $O(D N M^2 + N M^3) \rightarrow O(D N M^2)$
+	 \item \textit{Complexity}: $O(D N K^2 + N K^3) \rightarrow O(D N K^2)$
 	 \item Probabilistic model
 	 \begin{myalign*}
-	     \prod_{n = 1}^N \prod_{d \in O_n} \N(x_{dn} | \*w_d^T \*z_n, I) 
+	     \prod_{(d,n)\in\Omega}\N(x_{dn} | \*w_d^T \*z_n, I) 
 	     \times \prod_{n = 1}^N \N(\*z_n | 0, \frac{1}{\lambda_z} I) \\
 	     \times \prod_{d = 1}^D \N(\*w_d | 0, \frac{1}{\lambda_w} I)
 	 \end{myalign*}
 
 	 \item Since many ratings are missing we cannot normalize the data. A solution is to add offset terms:
 	 \begin{myalign*}
-	     \frac{1}{2} \sum_{n = 1}^N \sum_{d \in O_n} (x_{dn} - \*w_d^T \*z_n - w_{0d} - z_{0n} - \mu)^2
+	     \frac{1}{2} \sum_{(d,n)\in\Omega} (x_{dn} - \*w_d^T \*z_n - w_{0d} - z_{0n} - \mu)^2
 	 \end{myalign*}
 \end{itemize}
 % ========================================================
@@ -827,8 +826,8 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	    \*X = \*U \*S \*V^T
 	\end{myalign*}
 	\begin{itemize}
-		\item $\*U$ is an $D \times D$ matrix
-		\item $\*V$ is an $N \times N$ matrix
+		\item $\*U$ is a unitary $D \times D$ matrix
+		\item $\*V$ is a unitary $N \times N$ matrix
 		\item $\*S$ is a non-negative diagonal matrix of size $D \times N$ which are called \textbf{singular values} appearing in a descending order.
 		\item Columns of $\*U$ and $\*V$ are the left and right \textbf{singular vectors} respectively.
 	\end{itemize}
@@ -836,17 +835,14 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	\begin{myalign*}
 	    \*X = \sum_{d = 1}^D s_d \*u_d \*v_d^T
 	\end{myalign*}
-	This tells you about the spectrum of $\*X$ where higher singular vectors contain the \textit{low-frequency information} and lower singular values contain the \textit{high-frequency information}.
-    \item Let's now truncate these matrices
-    \begin{align*}
-        \*X \approx \*U_{tr} \*S_{tr} \*V^*_{tr}, 
-        \*T_{tr} \approx \*U_{tr} \*S_{tr}, \*T_{te} \approx \*X_{te}\*V_{tr}
-    \end{align*}
-    with $\*T_{tr}$ the reduced feature set of $\*X$ and $\*T_{te}$ the reduced feature set of $\*X_{te}$
+	This tells you about the spectrum of $\*X$ where higher singular vectors contain the \textit{low-frequency information} and lower singular values contain the \textit{high-frequency information}. 
+	\item Dimensionality Reduction \\
+	Take the matrix $\*S^{(K)}$ with the $K$ first diagonal elements non zero. Then, rank-$K$ approx:
+	$$ \*X \approx \*X_K = \*U\*S^{(K)}\*V^T$$
 \end{itemize}
 % ========================================================
 
-\section{Principal Componement Analysis}
+\subsection{Principal Componement Analysis}
 \begin{itemize}
 	\item PCA is a dimensionality reduction method and a method to decorrelate the data
 $\*X \approx \tilde{\*X} = \*W \*Z^T$
@@ -859,149 +855,10 @@ such that columns of $\*W$ are orthogonal.
 \item Thus the columns of matrix $\*U$ are called the \textbf{principal components} and they decorrelate the covariance matrix.
 \item Using SVD, we can compute the matrices in the following way
 \begin{myalign*}
-    \*W &= \*U \*S^{1 / 2}, \*Z = \*V \*S^{1 / 2}
+    \*W &= \*U \*S_D^{1 / 2}, \*Z^T = \*S^{1 / 2}\*V^T 
 \end{myalign*}
 \end{itemize}
 
-% ========================================================
-
-\section{Belief Propagation}
-\begin{itemize}
-    \item the goal is to learn \textit{inference of the latent variables using belief propagation}
-    \item Given a directed acyclic graph $G$ and parameters $\theta$, a \textbf{Bayesian network} defines the joint distribution as follows
-    \begin{align*}
-        p_{\theta}(\*x) = \prod_{k = 1}^K p_{\theta}(x_k | \text{parents}_k)
-    \end{align*}
-    \item Reduce complexity using bayesian rule. %LEARN
-    \item Message Passing:
-    \begin{enumerate}
-    	\item Assign each $\phi_k$ to a cluster $\*C_i$
-    	\item Initial potential $\psi_i (\*C_i) = \prod_{\phi_k \in \*C_i} \phi_k $
-    	\item Initial all messages to 1
-    	\item Repeat: select and edge $(i,j)$ and:
-    \end{enumerate}
-    \begin{myalign*}
-        m_{i \rightarrow j}(\* S_{i,j}) = \sum_{\*C_i - \* S_{i,j}} \psi_i \times \prod_{k \in (\N_i - {j})} m_{k \rightarrow i}
-    \end{myalign*}
-    \item Belief: $w_i(\*C_i) = \psi_i \times \prod_{k \in \N_i} \delta_{k \rightarrow i}$
-\end{itemize}
-
-% ========================================================
-
-\section{Multi-Layer Perceptron (MLP)} %LEARN
-\begin{itemize}
-	\item There are nonlinear function classes, whose conveninent layered structure leads to efficient computation of gradients. 
-    \item Known as \textbf{feed-forward neural network}
-    \item $\*z_n^{(k)}$ is the k'th hidden vector
-    \item $\*a_n^{(k)}$ is the corresponding activation
-    \item There are a total of $K$ layers
-    \begin{myalign*}
-        a_{mn}^{(k)} = (\bm w_m^{(k)})^T \*z_n^{(k - 1)}, \hspace{8pt} z_{mn}^{(k)} = h (a_{mn}^{(k)})
-    \end{myalign*}
-    \item For the first layer we have $\*z_n^{(0)} = \*x_n$
-    \item For the last layer, we use a link function to map $\*z_n^{(K - 1)}$ to the output $\*y_n$
-    \item A 1-layer MLP is simply a generalization of linear/logistic regression
-    \item $\*B^{(k)}$ a matrix with rows $(\bm w_m^{(k)})^T$
-    \begin{myalign*}
-        \*a_n^{(k)} = \* B^{(k)} \*z_n^{(k - 1)}, \hspace{8pt} \*z_n^{(k)} = h (\*a_n^{(k)})
-    \end{myalign*}
-    \item thus we have the input-output relationship
-    \begin{myalign*}
-        \hat{y}_n = g((\bm w^{(K - 1)})^T * h(\*B^{(K - 2)} * h(* ... * h(\*B^{(1)} * \*x_n)))
-    \end{myalign*}
-    with $g()$ the link function
-    \item We learn parameters $\*B$ using stochastic gradient-descent
-    \item Frequently used transfer function
-    \begin{myalign*}
-        g(a) = \tanh(a) = \frac{e^a - e^{-a}}{e^a + e^{-a}}
-    \end{myalign*}
-    \item \textbf{Backpropagation}: technic to compute the gradient in time linear in the number of training points and the number of weights and is nothing else than a chain rule of differential calculus.
-    \item The key-idea is to express the derivatives in terms of activations and hidden variables.
-    \begin{enumerate}
-    	\item \textbf{Forward}: compute $\*a_n^{(k)}$ and $\*z_n^{(k)}$
-    	\item \textbf{Backward}: compute $\bm \delta_n^{(k)} = d \bm \L / d \*a_n^{(k)}$ using 
-    	\begin{myalign*}
-    	    \bm \delta^{(k - 1)}_n = diag[(h' (\*a_n^{(k-1)})] (\*B^{(k)})^T \bm \delta_n^{(k)}
-    	\end{myalign*}
-    	\begin{myalign*}
-    	    \bm \delta_n^{K} = \* a_n^{K} - t_i
-    	\end{myalign*}
-    	\item Compute $d \bm \L / d \*B^{(k)}$ using 
-    	\begin{myalign*}
-    	    \frac{d \bm \L}{d\*B^{(k)}} = \sum_n \bm \delta_n^{(k)} (\*z_n^{(k)})^T
-    	\end{myalign*}
-    \end{enumerate}
-\end{itemize}
-% ========================================================
-
-\section{Gaussian Process (GP)}
-\begin{itemize}
-    \item GP are a family of statistical distributions in which time plays a role and for which any finite linear combination of samples has a joint Gaussian distribution.
-    \item \textbf{non-parametric} method (rather uses latent variables) that compute a probability dist. over predictions
-    \item They can be completely defined by their second-order statistics which means that if they have mean zero, then defining the covariance function completely defines the process behaviour.
-    \item Let us place a probabilistic prior shape on the approximation of a function.
-    \item A GP process defines a prior over function f
-    \begin{align*}
-        p(\*f | X) = \N(\*f | \*0, K(X))
-    \end{align*}
-    \item $K(X)$ defines shape and prior knowledge about our problem
-    \begin{align*}
-        &p(\*f | \*y, \*X_*, \*X) \sim \N(\mu', \sigma')\\
-        & \mu' = K(\*X_*, \*X)[K(\*X,\*X) + \sigma_n^2 I]^{-1}\*y\\
-        & \*\sigma' = K(\*X_*, \*X_*) - K(\*X_*, \*X)[K(\*X, \*X) + \sigma_n^2 I] K(\*X, \*X_*)
-    \end{align*}
-    with $\sigma_n$ the variance of the noise
-     \item Quadratic kernel 
-     \begin{align*}
-         k(\*x_n, \*x_m) = (1 + \*x_n^T \*x_m)^2
-     \end{align*}
-\end{itemize}
-% ========================================================
-
-\section{Decision Trees (DT)}
-\begin{itemize}
-    \item A decision tree is a structure in which each internal node represents a test on an attribute and each branch represents the outcome of the test and each leaf represents a class label.
-    \item Fast to train and fast to make predictions
-    \item Efficient for very high dimensional feature spaces and very large amounts of training data
-    \item Lack of smoothness and high variance (overfitting)
-    \item Goal: find a split (k, $\tau$) that minimizes an impurity measure at the leaves
-    \begin{itemize}
-        \item Find best feature to split on
-        \item Find best threshold
-    \end{itemize}
-\end{itemize}
-% ========================================================
-
-\section{Random Forests (RF)}
-\begin{itemize}
-    \item RF correct the overfitting bad "habit" of DTs.
-    \item Training: Learn M trees on different subsets (random) of training data
-    \item Prediction: Average of prediction of each tree
-    \item Variance of the model averaging:
-    \begin{align*}
-        z_1 = f_1 \hspace{5pt} &\Rightarrow \hspace{5pt} z_M = \frac{1}{M} \sum_{i = 1}^M f_i \\
-        V(z_1) = \sigma^2 \hspace{5pt} &\Rightarrow \hspace{5pt} V(z_M) = \frac{1}{M} \sigma^2 + \rho \frac{M - 1}{M} \sigma^2
-    \end{align*}
-    \item Variance reduction ratio:
-    \begin{align*}
-        \frac{V(z_1)}{V(z_M)} = \frac{M}{1 +\rho (M - 1)}
-    \end{align*}
-    \item 2 techniques for decorrelating trees:
-    \begin{itemize}
-        \item \textbf{Bagging}: Randomize training data
-        \item Randomized feature selection
-    \end{itemize}
-\end{itemize}
-
-% ========================================================
-
-% ========================================================
-
-% ========================================================
-
-% ========================================================
-
-% ========================================================
 
 
 
