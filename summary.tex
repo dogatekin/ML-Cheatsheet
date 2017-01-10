@@ -30,29 +30,29 @@
 \item A function $f(x)$ is convex, if for any $x_1, x_2 \in \* X$ and for any $0 \leq \lambda \leq 1$, we have :
 $$ f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2)$$
 
-\item Strictly convex if the inequality is strict.
+%\item Strictly convex if the inequality is strict.
 
-\item Sums of convex functions are also convex.
+%\item Sums of convex functions are also convex.
 
-\item A function with the form log-sum-exp is convex.
+%\item A function with the form log-sum-exp is convex.
 
-\item The Hessian is related to the convexity: a twice differentiable function is convex i-o-if the Hessian is positive definite.
-\item The Hessian of a convex function is positive semi-definite and for a strictly-convex function it is positive definite.
+\item The Hessian of a convex function is psd and for a strictly-convex function it's pd.
 \begin{myalign*}
       \*H_{i,j} = d^2 f /d x_i dx_j
  \end{myalign*}
 \end{itemize}
+
 % ========================================================
 
 \subsection{Linear Algebra}
 \begin{itemize}
-\item Column $\*x \in \R^n$, rows $\*x^T$, matrix $\*A \in \R^{m \times n}$
+%\item Column $\*x \in \R^n$, rows $\*x^T$, matrix $\*A \in \R^{m \times n}$
 
-\item $\*x^T \*x$ is a scalar, $\*x \*x^T$ is a matrix
+%\item $\*x^T \*x$ is a scalar, $\*x \*x^T$ is a matrix
 
-\item $\*A^{-1}$ exist if $\*A$ is full rank
+%\item $\*A^{-1}$ exist if $\*A$ is full rank
 
-\item $(\*A \*B)^T = \*B^T \*A^T$
+%\item $(\*A \*B)^T = \*B^T \*A^T$
 
 \item \textbf{Condition number} of a function measures how much the output value can change for a small change in the input. A matrix with a high condition number is said to be \textbf{ill-conditioned}. If $\*A$ is normal ($A^T A = A A^T$) then
 \begin{myalign*}
@@ -69,8 +69,8 @@ $$ f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2)
 \end{myalign*}
 for any real $N \times 1$ vector $a$.
 \item \textbf{positive definite} if $\*a^T \*V \*a > 0$
-\item Cost of matrix inversion: $O(n^3) \rightarrow O(n^{2.372})$
-\item $det(\*A)$ using LU decomposition: $O(n^3)$
+%\item Cost of matrix inversion: $O(n^3) \rightarrow O(n^{2.372})$
+%\item $det(\*A)$ using LU decomposition: $O(n^3)$
 
 \end{itemize}
 
@@ -860,13 +860,61 @@ such that columns of $\*W$ are orthogonal.
 \end{itemize}
 
 
-% ========================================================
 
 \section{Neural Net}
 \begin{itemize}
-	\item \textcolor{red}{Coucou}
+	\item Basic structure: 
+	One \emph{input} layer of size D, L \emph{hidden} layers of size K, and one \emph{output} layer. (\emph{feedforward} network). $x_j^{(l)} = \phi\left(\sum_i w_{i,j}^{(l)}x_i^{(l-1)} + b_j^{(l)} \right)$.
+	\item NN can represent the Rienmann sum with only two layers $\Rightarrow$ It's powerful!
+	\item Cost function: \\$\L = \frac{1}{N} \sum_{n=1}^N\left( y_n - f^{(L+1)} \circ ... \circ f^{(1)}(\bm x_n^{(0)})\right)^2$ \\
+	We can use SGD to minimize the cost function.
+	\item Compact form: $\bm W_{i,j}^{(l)} = w_{i,j}^{(l)}$ \\
+	$\bm x^{(l)} = f^{(l)}(\bm x^{(l-1)}) = \phi\left( \left(\bm W^{(l)}\right)^T\bm x^{(l-1)} + \bm b^{(l)}\right)$
 \end{itemize}
 
+% ========================================================
+
+\subsection{Backpropagation Algorithm}
+\begin{itemize}
+ \item \emph{Forward pass}: Compute $\bm z^{(l)} = \left(\bm W^{(l)}\right)^T\bm x^{(l-1)} + \bm b^{(l)}$ with $\bm x^{(0)} = \bm x_n$ and $\bm x^{(l)} = \phi(\bm z^{(l)})$.
+ \item \emph{Backward pass}: Set $\delta^{(L+1)} = -2(y_n - \bm x^{(L+1)})\phi'(z^{(L+1)})$ (if squared loss). Then compute
+ 
+\end{itemize}
+ \begin{myalign*}
+  \delta_j^{(l)} = \frac{\partial \L_n}{\partial z_j^{(l)}} = \sum_k \frac{\partial \L_n}{\partial z_k^{(l+1)}}\frac{\partial z_k^{(l+1)}}{\partial z_j^{(l)}} \\= \sum_k \delta_k^{(l+1)}\bm W_{j,k}^{(l+1)}\phi'(z_j^{(l)}) 
+ \end{myalign*}
+\begin{itemize}
+ \item \emph{Final Computation}:
+\end{itemize}
+\begin{myalign*}
+\frac{\partial\L_n}{\partial w_{i,j}^{(l)}} = \sum_k \frac{\partial \L_n}{\partial z_k^{(l)}}\frac{\partial z_k^{(l)}}{\partial w_{i,j}^{(l)}} = \frac{\partial \L_n}{\partial z_j^{(l)}}\frac{\partial z_j^{(l)}}{\partial w_{i,j}^{(l)}} \\= \delta_j^{(l)}\bm x_i^{(l-1)}
+\end{myalign*}
+\begin{myalign*}
+\frac{\partial \L_n}{\partial b_j^{(l)}} = \sum_k \frac{\partial \L_n}{\partial z_k^{(l)}}\frac{\partial z_k^{(l)}}{\partial b_j^{(l)}} = \frac{\partial \L_n}{\partial z_j^{(l)}}\frac{\partial z_j^{(l)}}{\partial b_j^{(l)}} \\= \delta_j^{(l)}\cdot 1 = \delta_j^{(l)} 
+\end{myalign*}
+ 
+% ======================================================== 
+ 
+\subsection{Activation Functions}
+\begin{description}
+ \item[Sigmoid] $\phi(x) = \frac{1}{1+e^{-x}}$ Positive, bounded. $\phi'(x) \simeq 0$ for large $|x|$ $\Rightarrow$ Learning slow.
+ \item[Tanh] $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} = \phi(2x) - 1/2$. Balanced, bounded. Learning slow too.
+ \item[ReLU] $(x)_{+} = \max{0,x}$ Positive, unbounded. Derivate = 1 if $x>0$, 0 if $x<0$
+ \item[Leaky ReLU] $f(x) = \max{\alpha x, x}$ Remove 0 derivative.
+ \item[Maxout] $f(x) = max{\bm x^T\bm w_1 + b_1, ..., \bm x^T\bm w_k + b_k}$ (Generalization of ReLU)
+\end{description}
+
+% ======================================================== 
+ 
+\subsection{Convulotional NN} 
+
+{\color{red} WHAT CAN I SAY???}
+
+% ======================================================== 
+ 
+\subsection{Reg, Data Augmentation and Dropout}
+
+{\color{red} DO WE NEED SOMETHING IN THIS??}
 
 % ========================================================
 
