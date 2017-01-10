@@ -431,18 +431,18 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	    \sigma(x) = \frac{\exp(x)}{1 + \exp(x)}
 	\end{myalign*}
 	\begin{myalign*}
-	    p(y_n = \*C_1| \*x_n) = \sigma(\tilde{\*x}^T \bm w)\\
-	    p(y_n = \*C_2 | \*x_n) = 1 - \sigma(\tilde{\*x}^T \bm w)
+	    p(y_n = \*C_1| \*x_n) = \sigma(\bm x^T \bm w)\\
+	    p(y_n = \*C_2 | \*x_n) = 1 - \sigma(\bm x^T \bm w)
 	\end{myalign*}
 	\item The probabilistic model:
 	\begin{myalign*}
-	    p(\*y | \*X, \bm w) = \prod_{n = 1}^N \sigma(\tilde{\*x}_n^T \bm w)^{y_n}(1 - \sigma(\tilde{\*x}_n^T \bm w))^{1 - y_n}
+	    p(\*y | \*X, \bm w) = \prod_{n = 1}^N \sigma(\bm x_n^T \bm w)^{y_n}(1 - \sigma(\bm x_n^T \bm w))^{1 - y_n}
 	\end{myalign*}
 	\item The log-likelihood:
 	\begin{myalign*}
 	    \L_{MLE}(\bm w) = \sum_{n = 1}^N
 	    \left(
-	    	y_n \tilde{\*x}_n^T \bm w - \log(1 + \exp(\tilde{\*x}_n^T \bm w))
+	    	y_n \bm x_n^T \bm w - \log(1 + \exp(\bm x_n^T \bm w))
 	    \right)
 	\end{myalign*}
 	\item We can use the fact that
@@ -453,7 +453,7 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	\begin{myalign*}
 	    \*g = \frac{d \L}{d \bm w} &= \sum_{n = 1}^N 
 	    \left( 
-	    	\tilde{\*x}_n y_n - \tilde{\*x}_n \sigma(\tilde{\*x}_n^T \bm w)
+	    	\bm x_n y_n - \bm x_n \sigma(\bm x_n^T \bm w)
 	    	\right) \\
 	    &= - \*X^T[\sigma(\*X \bm w) - \*y]
 	\end{myalign*}
@@ -466,13 +466,13 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 		\end{myalign*}
 		\item Hessian is the derivative of the gradient
 		\begin{myalign*}
-		    \*H(\bm w) &= - \frac{d \*g(\bm w)}{d \bm w^T}  = \sum_{n = 1}^N \frac{d}{d \bm w^T} \sigma(\tilde{\*x}_n^T \bm w) \tilde{\*x}_n\\
-		    &= \sum_{n = 1}^N \tilde{\*x}_n \sigma(\tilde{\*x}_n^T \bm w)(1 - \sigma(\tilde{\*x}_n^T \bm w)) \tilde{\*x}_n^T\\
+		    \*H(\bm w) &= - \frac{d \*g(\bm w)}{d \bm w^T}  = \sum_{n = 1}^N \frac{d}{d \bm w^T} \sigma(\bm x_n^T \bm w) \bm x_n\\
+		    &= \sum_{n = 1}^N \bm x_n \sigma(\bm x_n^T \bm w)(1 - \sigma(\bm x_n^T \bm w)) \bm x_n^T\\
 		    &= \tilde{\*X}^T \*S \tilde{\*X}
 		\end{myalign*}
 		where $\*S$ is a $N \times N$ diagonal matrix with diagonals
 		\begin{myalign*}
-		    S_{nn} = \sigma(\tilde{\*x}_n^T \bm w)(1 - \sigma(\tilde{\*x}_n^T \bm w))
+		    S_{nn} = \sigma(\bm x_n^T \bm w)(1 - \sigma(\bm x_n^T \bm w))
 		\end{myalign*}
 		\item The negative of the log-likelihood is not strictly convex.
 	\end{itemize}
@@ -523,17 +523,17 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	\end{myalign*}
 	\item First and second derivatives of $A(\eta)$ are related to the mean and the variance
 	\begin{myalign*}
-	    \frac{d A(\eta)}{d \eta} = E[\bm \phi(\eta)], \hspace{4pt} \frac{d^2 A(\eta)}{d \eta^2} = Var[\bm \phi(\eta)]
+	    \frac{d A(\eta)}{d \eta} = \E[\bm \phi(\eta)], \hspace{4pt} \frac{d^2 A(\eta)}{d \eta^2} = \V[\bm \phi(\eta)]
 	\end{myalign*}
 	\item $A(\eta)$ is convex
 	\item The generalized maximum likelihood cost to minimize is
 	\begin{myalign*}
-	    \min_{\bm w} \L(\bm w) = - \sum_{n = 1}^N \log(p(y_n | \tilde{\*x}^T_n \bm w))
+	    \min_{\bm w} \L(\bm w) = - \sum_{n = 1}^N \log(p(y_n | \bm x^T_n \bm w))
 	\end{myalign*}
-	where $p(y_n | \tilde{\*x}^T_n \bm w)$ is an exponential family distribution
+	where $p(y_n | \bm x^T_n \bm w)$ is an exponential family distribution
 	\item We obtain the solution
 	\begin{myalign*}
-	    \frac{d \L}{d \bm w} = \tilde{\*X}^T[\*g^{-1}(\bm \eta) - \bm \phi(\*y)]
+	    \frac{d \L}{d \bm w} = \*X^T[\*g^{-1}(\bm \eta) - \bm \phi(\*y)]
 	\end{myalign*}
 \end{itemize}
 
@@ -552,24 +552,79 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 
 % ========================================================
 
+\section{Support Vector Machine} 
+\begin{itemize}
+	\item Combination of the kernel trick plus a modified loss function (Hinge loss)
+	\item Solution to the dual problem is sparse and non-zero entries will be our \textbf{support vectors}.
+	\item \textbf{Kernelised feature vector} where $\bm \mu_k$ are centroids
+	\begin{myalign*}
+	    \bm \phi(\*x) = [k(\*x, \bm \mu_1), ..., k(\*x, \bm \mu_K)]
+	\end{myalign*}
+	\item In practice we'll take a subset of data points to be prototype $\rightarrow$ \textbf{sparse vector machine}.
+	\item Assume $y_n \in \{-1, 1\}$
+	\item SVM optimizes the following cost
+	\begin{myalign*}
+	    \L(\bm w) = \min_{\bm w} \sum_{n = 1}^N [1 - y_n \tilde{\bm \phi}_n^T \bm w]_+ + \frac{\lambda}{2} \sum_{j = 1}^M w^2_j
+	\end{myalign*}
+	\item Minimum doesn't change with a rescaling of $\bm w$
+	\item choose the hyperplane so that the distance from it to the nearest data point on each side is maximized
+	\item \textbf{Duality}:
+	\begin{itemize}
+		\item Hard to minimize $g(\bm w)$ so we define
+		\begin{myalign*}
+		    \L(\bm w) = \max_{\bm \alpha} G(\bm w, \bm \alpha)
+		\end{myalign*}
+		\item we use the property that
+		\begin{myalign*}
+		    C[v_n]_+ = \max(0, C v_n) = \max_{\alpha_n \in [0, C]} \alpha_n v_n
+		\end{myalign*}
+		\item We can rewrite the problem as
+		\begin{myalign*}
+		    \min_{\bm w} \max_{\bm \alpha \in [0, C]^N} \sum_{n = 1}^N \alpha_n (1 - y_n \bm \phi_n^T \bm w) + \frac{1}{2} \sum_{j = 1}^M w_j^2
+		\end{myalign*}
+		\item This is differentiable, convex in $\bm w$ and concave in $\bm \alpha$
+		\item \textbf{Minimax theorem}: 
+		\begin{myalign*}
+		    \min_{\bm w} \max_{\bm \alpha} G(\bm w, \bm \alpha) = \max_{\bm \alpha} \min_{\bm w} G(\bm w, \bm \alpha)
+		\end{myalign*}
+		because $G$ is convex in $\bm w$ and concave in $\bm \alpha$.
+		\item Derivative w.r.t. $\bm w$:
+		\begin{myalign*}
+		    \bm \nabla_{\bm w} G(\bm w, \bm \alpha) = - \sum_{n=1}^N\alpha_n y_n\bm x_n + \lambda \bm w
+		\end{myalign*}
+		\item Equating this to 0, we get:
+			\begin{myalign*}
+			  \bm w(\bm \alpha) = \frac{1}{\lambda} \sum_{n=1}^N \alpha_n y_n \bm x_n = \frac{1}{\lambda} \*{X}\*{Y}\bm \alpha \\
+			  \*{Y} := \text{diag}(\bm y)
+			\end{myalign*}
+		\item Plugging $\bm w^*$ back in the dual problem
+		\begin{myalign*}
+		    \max_{\bm \alpha \in [0, 1]^N} \bm \alpha^T \*1 - \frac{1}{2\lambda} \bm \alpha^T \*Y \bm X^T \bm X \* Y \bm \alpha
+		\end{myalign*}
+		\item This is a differentiable least-squares problem. Optimization is easy using Sequential Minimal Optimization. It is also naturally kernelized with $\*K = \bm X^T \bm X$
+		\item The solution $\bm \alpha$ is sparse and is non-zero only for the training examples that are instrumental in determining the decision boundary.
+	\end{itemize}
+\end{itemize}
+
+% ========================================================
+
 \section{Kernel Ridge Regression}
 \begin{itemize}
 	\item The following is true for ridge regression
 	\begin{align}
-	    \bm w &= (\*X^T \*X + \lambda \*I_D)^{-1} \*X^T \*y \\
-	    &= \*X^T(\*X\*X^T + \lambda \*I_N)^{-1} \*y = \*X^T \bm \alpha \nonumber
+	    \bm w^* &= (\*X^T \*X + \lambda \*I_D)^{-1} \*X^T \*y \\
+	    &= \*X^T(\*X\*X^T + \lambda \*I_N)^{-1} \*y = \*X^T \bm \alpha^* \nonumber
 	\end{align}
 	\item Complexity of computing $\bm w$: (1) $O(D^2 N + D^3)$, (2) $O(D N^2 + N^3)$
 	\item Thus we have
 	\begin{myalign*}
-	    \bm w = \sum_{n = 1}^N \alpha_n \*x_n, \hspace{5pt} \*y = \sum_{d = 1}^D w_d \*{\bar{x}}_d
+	    \bm w^* = \*X\bm \alpha^*, \quad \text{with } \bm w^* \in \R^D \text{ and } \bm \alpha^* \in \R^N
 	\end{myalign*}
-	with $\*x_n$ the rows of $\*X$ and $\*{\bar{x}}_d$ the columns of $\*X$ 
-	\item The representer theorem allows us to write an equivalent optimization problem în terms of $\bm \alpha$.
+	\item The representer theorem allows us to write an equivalent optimization problem in terms of $\bm \alpha$.
 	\begin{myalign*}
 	    \bm \alpha = \argmax_{\bm \alpha} 
 	    \left(
-	    - \frac{1}{2}\bm \alpha (\*X \*X^T + \lambda \*I_N)^T \bm \alpha + \bm \alpha^T \*y 
+	    - \frac{1}{2}\bm \alpha^T (\*X^T \*X + \lambda \*I_N) \bm \alpha + \bm \alpha^T \*y 
 	    \right)
 	\end{myalign*}
 	\item $\*K = \*X \*X^T$ is called the \textbf{kernel matrix} or \textbf{Gram matrix}.
@@ -600,71 +655,6 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 	\begin{myalign*}
 	    \*y = \bm w^T \*x = \sum_{i = 1}^K \alpha_i \*x_i^T \*x = \sum_{i = 1}^K \alpha_i k(\*x, \*x_i) 
 	\end{myalign*}
-\end{itemize}
-
-% ========================================================
-
-\section{Support Vector Machine} 
-\begin{itemize}
-	\item Combination of the kernel trick plus a modified loss function (Hinge loss)
-	\item Solution to the dual problem is sparse and non-zero entries will be our \textbf{support vectors}.
-	\item \textbf{Kernelised feature vector} where $\bm \mu_k$ are centroids
-	\begin{myalign*}
-	    \bm \phi(\*x) = [k(\*x, \bm \mu_1), ..., k(\*x, \bm \mu_K)]
-	\end{myalign*}
-	\item In practice we'll take a subset of data points to be prototype $\rightarrow$ \textbf{sparse vector machine}.
-	\item Assume $y_n \in \{-1, 1\}$
-	\item SVM optimizes the following cost
-	\begin{myalign*}
-	    g(\bm w) = \min_{\bm w} \sum_{n = 1}^N [1 - y_n \tilde{\bm \phi}_n^T \bm w]_+ + \frac{\lambda}{2} \sum_{j = 1}^M w^2_j
-	\end{myalign*}
-	\item Minimum doesn't change with a rescaling of $\bm w$
-	\item choose the hyperplane so that the distance from it to the nearest data point on each side is maximized
-	\item \textbf{Duality}:
-	\begin{itemize}
-		\item Hard to minimize $g(\bm w)$ so we define
-		\begin{myalign*}
-		    g(\bm w) = \max_{\bm \alpha} G(\bm w, \bm \alpha)
-		\end{myalign*}
-		\item we use the property that
-		\begin{myalign*}
-		    C[v_n]_+ = \max(0, C v_n) = \max_{\alpha_n \in [0, C]} \alpha_n v_n
-		\end{myalign*}
-		\item We can rewrite the problem as
-		\begin{myalign*}
-		    \min_{\bm w} \max_{\bm \alpha \in [0, C]^N} \sum_{n = 1}^N \alpha_n (1 - y_n \tilde{\bm \phi}_n^T \bm w) + \frac{1}{2} \sum_{j = 1}^M w_j^2
-		\end{myalign*}
-		\item This is differentiable, convex in $\bm w$ and concave in $\bm \alpha$
-		\item \textbf{Minimax theorem}: 
-		\begin{myalign*}
-		    \min_{\bm w} \max_{\bm \alpha} G(\bm w, \bm \alpha) = \max_{\bm \alpha} \min_{\bm w} G(\bm w, \bm \alpha)
-		\end{myalign*}
-		because $G$ is convex in $\bm w$ and concave in $\bm \alpha$.
-		\item Derivative w.r.t. $\bm w$:
-		\begin{myalign*}
-		    \frac{d G}{d \bm w} = - 
-		    \left(
-		    	\sum_{n = 1}^N \alpha y_n \tilde{\phi_n}
-		    \right)
-		    + 
-		    \left[
-		    	\begin{array}{c}
-		    		0 \\ \bm w_{1 : M}
-		    	\end{array}
-		    \right]
-		\end{myalign*}
-		\item Equating this to 0, we get:
-			\begin{myalign*}
-			    &\bm w^*_{1 : M} = \sum^N_{n = 1} \alpha_n y_n \phi_n = \bm \Phi^T \text{diag}(\*y) \bm \alpha\\
-			    &\bm \alpha^T \*y = 0
-			\end{myalign*}
-		\item Plugging $\bm w^*$ back in the dual problem
-		\begin{myalign*}
-		    \max_{\bm \alpha \in [0, C]^N} \bm \alpha^T \*1 - \frac{1}{2} \bm \alpha^T \*Y \bm \Phi \bm \Phi \* Y \bm \alpha
-		\end{myalign*}
-		\item This is a differentiable least-squares problem. Optimization is easy using Sequential Minimal Optimization. It is also naturally kernelized with $\*K = \bm \Phi \bm \Phi^T$
-		\item The solution $\bm \alpha$ is sparse and is non-zero only for the training examples that are instrumental in determining the decision boundary.
-	\end{itemize}
 \end{itemize}
 
 % ========================================================
