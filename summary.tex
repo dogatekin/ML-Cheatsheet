@@ -860,6 +860,36 @@ such that columns of $\*W$ are orthogonal.
 \end{itemize}
 
 
+% ========================================================
+
+\section{Neural Net}
+\begin{itemize}
+	\item \textcolor{red}{Coucou}
+\end{itemize}
+
+
+% ========================================================
+
+\section{Bayes Net}
+\begin{itemize}
+	\item Graph example: $p(x, y, z) = p(y | x) p(z | x) p(x)$ : $(y \leftarrow x \rightarrow z)$ 
+	\item \textbf{D-Separation} X and Y are D-separated by Z if every path from $ x \in X$ to $y \in Y$ is blocked by Z.
+	\item \textbf{Blocked Path} if the path contains a variable that
+	\begin{itemize}
+		\item is in Z and is \textbf{head-to-tail} or \textbf{tail-to-tail}
+		\item the node is \textbf{head-to-head} and neither the node nor the descendant are in Z.
+	\end{itemize}	
+	\item \textbf{Markov Blanket} (which blocks node A from the rest of the net) contains:
+	\begin{itemize}
+		\item parents of A
+		\item children of A
+		\item parents of children of A
+	\end{itemize}
+	
+\end{itemize}
+
+
+
 
 
 
