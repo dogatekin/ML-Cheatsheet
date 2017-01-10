@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper,landscape]{article} % dans course_info le prof dit qu'il faut écrire en 11pt...
+\documentclass[11pt,a4paper,landscape]{article} % dans course_info le prof dit qu'il faut écrire en 11pt...
 
 \usepackage{multicol}
 \usepackage{calc}
@@ -42,8 +42,8 @@
 \ifthenelse{\lengthtest { \paperwidth = 11in}}
 	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
 	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
-		{\geometry{top=0.5cm,left=0.5cm,right=0.5cm,bottom=0.5cm} }
-		{\geometry{top=0.5cm,left=0.5cm,right=0.5cm,bottom=0.5cm} }
+		{\geometry{top=0.3cm,left=0.3cm,right=0.3cm,bottom=0.3cm} }
+		{\geometry{top=0.3cm,left=0.3cm,right=0.3cm,bottom=0.3cm} }
 	}
 
 \newcommand{\specialcell}[2][c]
@@ -126,8 +126,8 @@
 
 \makeatletter
 \newenvironment{myalign*}{%
-  \setlength{\abovedisplayskip}{2pt}%
-  \setlength{\belowdisplayskip}{2pt}%
+  \setlength{\abovedisplayskip}{1pt}%
+  \setlength{\belowdisplayskip}{1pt}%
   \start@align\@ne\st@rredtrue\m@ne
 }%
 {\endalign}

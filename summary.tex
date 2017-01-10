@@ -54,7 +54,9 @@ $$ f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2)
 
 %\item $(\*A \*B)^T = \*B^T \*A^T$
 
-\item \textbf{Condition number} of a function measures how much the output value can change for a small change in the input. A matrix with a high condition number is said to be \textbf{ill-conditioned}. If $\*A$ is normal ($A^T A = A A^T$) then
+\item \textbf{Condition number} 
+%of a function measures how much the output value can change for a small change in the input. A matrix with a high condition number is said to be \textbf{ill-conditioned}. 
+If $\*A$ is normal ($A^T A = A A^T$) then
 \begin{myalign*}
     k(\*A) = 
     \left|
@@ -165,19 +167,17 @@ with $\bm w$ the parameters of the model.
 \section{Optimization}
 \subsection{Grid search}
 \begin{itemize}
-    \item Compute the cost over a grid of $M$ points to find the minimum
-    \item Exponential Complexity 
-    \item Hard to find a good range of values
+    \item Compute the cost over a grid of $M$ points to find the minimum. Exponential Complexity. Hard to find a good range of values
 \end{itemize}
 
 % ========================================================
 
 \subsection{Gradient Descent}
 \begin{itemize}
-	\item Gradient descent uses only first-order information and takes steps in the direction of the gradient
-	\item Given a cost function $\L(\bm w)$ we wish to find $\bm w$ that minimizes the cost: 
+	\item GD uses only first-order information and takes steps in the opposite direction of the gradient
+	\item Given cost function $\L(\bm w)$ we want to find $\bm w$
 	\begin{myalign*}
-	    \min_{\bm w} \L(\bm w)
+	    \bm w = \arg\min_{\bm w} \L(\bm w)
 	\end{myalign*}
 \end{itemize}
 
@@ -214,7 +214,7 @@ with $\bm w$ the parameters of the model.
         \item \textit{sufficient}: Hessian matrix is positive definite: $\* H(\bm w^*) = \frac{d^2 \L(\bm w^*)}{d \bm w d \bm w^T}$
     \end{enumerate}
 
-    \item Very sensitive to illconditioning. Therefore, always normalize your feature otherwise step-size selection is difficult since different directions might move at different speed.
+    \item Very sensitive to illconditioning $\Rightarrow$ always normalize features.
     \item \textit{Complexity}: $O(NDI)$ with $I$ the number of iterations
 \end{itemize}
 
@@ -248,9 +248,9 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 
 \section{Least Squares}
 \begin{itemize}
-    \item In some cases, we can compute the minimum of the cost function analytically.
+   %\item In some cases, we can compute the minimum of the cost function analytically.
 
-    \item use the first optimality conditions:
+    \item Use the first optimality conditions:
     \begin{myalign*}
         \bm \nabla L(\bm w^*)= 0 \Rightarrow \*X^T \*e = \*X^T (\*y - \*X \bm w)=  0
     \end{myalign*}
@@ -262,11 +262,11 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
     \begin{myalign*}
         y_m := \*{x^T_m} \bm w^* = \*{x^T_m}(\*X^T\*X)^{-1} \*X^T \*y
     \end{myalign*}
-    \item The \textbf{Gram matrix} $\*X^T\*X$ is positive definite and is also invertible iff $\*X$ has full column rank.
+    \item The \textbf{Gram matrix} $\*X^T\*X$ is pd and is also invertible iff $\*X$ has full column rank.
     
     \item \textit{Complexity}: $O(ND^2 + D^3) \equiv O(ND^2)$
 
-    \item $\*X$ can be rank deficient when $D > N$ or when the comlumns $\*{\bar{x}}_d$ are nearly collinear. In this case, the matrix is ill-conditioned, leading to numerical issues.
+    \item $\*X$ can be rank deficient when $D > N$ or when the comlumns $\*{\bar{x}}_d$ are nearly collinear. $\Rightarrow$  matrix is ill-conditioned.
 \end{itemize}
 
 % ========================================================
@@ -307,11 +307,11 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 
 \section{Ridge Regression}
 \begin{itemize}
-    \item Linear models usually underfit. One way is to use nonlinear basis functions instead.
+    \item Linear models usually overfit. One way is to use nonlinear basis functions instead.
     \begin{myalign*}
         y_n = w_0 + \sum_{j = 1}^M w_j \phi_j(\*x_n) = \bm{\tilde{\phi}}(\*x_n)^T \bm w
     \end{myalign*}
-    \item This model is linear in $\bm w$ but nonlinear in $\*x$. Note that the dimensionality is now M, not D.
+    \item This model is linear in $\bm w$ but nonlinear in $\*x$. Dimension is now M, not N.
     \item Polynomial basis
     \begin{myalign*}
         \bm \phi(x_n) = [1, x_n , x_n^2 , ..., x_n^M]
@@ -321,7 +321,7 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
         \bm w^*_{lse} = (\bm{\tilde{\Phi}}^T\bm{\tilde{\Phi}})^{-1}\bm{\tilde{\Phi}}^T \*y
     \end{myalign*}
 
-    \item Complex models overfit easily. Thus we can choose simpler models by adding a \textbf{regularization term} which penalizes complex models
+    \item Complex models overfit easily. THus we can penalize them with a \textbf{regularization term}
     \begin{myalign*}
         \min_{\bm w} 
         \left( 
@@ -382,13 +382,15 @@ $$
 
 % ========================================================
 
-\section{Cross-Validation}
-\begin{itemize}
-	\item We should choose $\lambda$ to minimize the mistakes that will be made in the future.
-	\item We split the data into train and validation sets and we pretend that the validation set is the future data. We fit our model on the training set and compute a prediction-error on the validation set. This gives us an \textit{estimate} of the \textit{generalization error}.
-	\item \textbf{K-fold cross validation} randomly partition the data into $K$ groups. We train on $K - 1$ groups and test on the remaining group. We repeat this until we have tested on all $K$ sets. We then average the results.
-	\item Cross-validation returns an unbiased estimate of the generalization error and its variance.
-\end{itemize}
+
+%\section{Cross-Validation}
+%\begin{itemize}
+%	\item We should choose $\lambda$ to minimize the mistakes that will be made in the future.
+%	\item We split the data into train and validation sets and we pretend that the validation set is the future data. We fit our model on the training set and compute a prediction-error on the validation set. This gives us an \textit{estimate} of the \textit{generalization error}.
+%	\item \textbf{K-fold cross validation} randomly partition the data into $K$ groups. We train on $K - 1$ groups and test on the remaining group. We repeat this until we have tested on all $K$ sets. We then average the results.
+%	\item Cross-validation returns an unbiased estimate of the generalization error and its variance.
+%\end{itemize}
+
 % ========================================================
 
 \section{Bias-Variance decomposition}
@@ -401,13 +403,13 @@ $$
 	 \begin{center}
 	 	expected loss $= (\text{bias})^2$ + variance + noise
 	 \end{center}
-	\item Both model bias and estimation bias are important
-	\item Ridge regression increases estimation bias while reducing variance
-	\item Increasing model complexity increases test error
+	\item Model bias and estimation bias are important
+	\item RR increases estimation bias and reduces var
+	\item Model more complex increases test error
 	\item Small $\lambda \rightarrow$ low bias but large variance
 	\item Large $\lambda \rightarrow$ large bias but low variance
 	\begin{myalign*}
-	    err = \sigma^2 + E[f_{lse} - E[f_{lse}]]^2 + [f_{true} - E[f_{lse}]]^2
+	    err = \sigma^2 + \E[f_{lse} - \E[f_{lse}]]^2 + [f_{true} - \E[f_{lse}]]^2
 	\end{myalign*}
 \end{itemize}
 % ========================================================
@@ -482,13 +484,12 @@ $$
 	\begin{itemize}
 		\item Uses second-order information and takes steps in the direction that minimizes a quadratic approximation
 		\begin{myalign*}
-		    \L(\bm w) = \L(\bm w^{(k)}) + \*g_k^T (\bm w - \bm w^{(k)})\\ + (\bm w - \bm w^{(k)})^T \*H_k(\bm w - \bm w^{(k)})
+		    \L(\bm w) = \L(\bm w^{(k)}) + \*\nabla\L_k^T (\bm w - \bm w^{(k)})\\ + (\bm w - \bm w^{(k)})^T \*H_k(\bm w - \bm w^{(k)})
 		\end{myalign*}
 		and it's minimum is at
 		\begin{myalign*}
-		    \bm w^{k + 1} = \bm w^{(k)} - \alpha_k \*H_k^{-1}\*g_k
+		    \bm w^{k + 1} = \bm w^{(k)} - \gamma_k \*H_k^{-1}\*\nabla\L_k
 		\end{myalign*}
-		where $\*g_k$ is the gradient and $\alpha_k$ the learning rate.
 		\item Complexity: $O((ND^2 + D^3)I)$
 	\end{itemize}
 	\item \textbf{Penalized Logistic Regression}
@@ -502,41 +503,41 @@ $$
 
 % ========================================================
 \section{Generalized Linear Model}
+\textbf{Exponential family distribution}
+\begin{myalign*}
+    p(\*y | \bm \eta) = \frac{h(y)}{Z} \exp(\bm \eta^T \bm \phi(\*y) - A(\bm \eta))
+\end{myalign*}
 \begin{itemize}
-	\item \textbf{Exponential family distribution}
-	\begin{myalign*}
-	    p(\*y | \bm \eta) = \frac{h(y)}{Z} \exp(\bm \eta^T \bm \phi(\*y) - A(\bm \eta))
-	\end{myalign*}
-	\begin{itemize}
-		\item Bernoulli distribution
-		\begin{myalign*}
-		    p(y | \mu) &= \mu^y (1- \mu)^{1 - y}\\
-		    &= \exp(y \log(\frac{\mu}{1 - \mu} + \log(1 - \mu)))
-		\end{myalign*}
-		\item there is a relationship between $\eta$ and $\mu$ throught the \textbf{link function}
-		\begin{myalign*}
-		    \eta = \log(\frac{\mu}{1 - \mu}) \leftrightarrow \mu = \frac{e^{\eta}}{1 + e^{\eta}}
-		\end{myalign*}
-		\item Note that $\mu$ is the mean parameter of $y$
-	\end{itemize}
-	\item Relationship between the mean $\bm \mu$ and $\bm \eta$ is defined using a link function $g$
-	\begin{myalign*}
-	    \bm \eta = \*g(\bm \mu) \Leftrightarrow \bm \mu = \*g^{-1}(\bm \eta)
-	\end{myalign*}
-	\item First and second derivatives of $A(\eta)$ are related to the mean and the variance
-	\begin{myalign*}
-	    \frac{d A(\eta)}{d \eta} = \E[\bm \phi(\eta)], \hspace{4pt} \frac{d^2 A(\eta)}{d \eta^2} = \V[\bm \phi(\eta)]
-	\end{myalign*}
-	\item $A(\eta)$ is convex
-	\item The generalized maximum likelihood cost to minimize is
-	\begin{myalign*}
-	    \min_{\bm w} \L(\bm w) = - \sum_{n = 1}^N \log(p(y_n | \bm x^T_n \bm w))
-	\end{myalign*}
-	where $p(y_n | \bm x^T_n \bm w)$ is an exponential family distribution
-	\item We obtain the solution
-	\begin{myalign*}
-	    \frac{d \L}{d \bm w} = \*X^T[\*g^{-1}(\bm \eta) - \bm \phi(\*y)]
-	\end{myalign*}
+      \item Bernoulli distribution
+      \begin{myalign*}
+	  p(y | \mu) &= \mu^y (1- \mu)^{1 - y}\\
+	  &= \exp(y \log(\frac{\mu}{1 - \mu} + \log(1 - \mu)))
+      \end{myalign*}
+      \item there is a relationship between $\eta$ and $\mu$ throught the \textbf{link function}
+      \begin{myalign*}
+	  \eta = \log(\frac{\mu}{1 - \mu}) \leftrightarrow \mu = \frac{e^{\eta}}{1 + e^{\eta}}
+      \end{myalign*}
+      \item Note that $\mu$ is the mean parameter of $y$
+\end{itemize}
+\begin{itemize}
+  \item Relationship between the mean $\bm \mu$ and $\bm \eta$ is defined using a link function $g$
+  \begin{myalign*}
+      \bm \eta = \*g(\bm \mu) \Leftrightarrow \bm \mu = \*g^{-1}(\bm \eta)
+  \end{myalign*}
+  \item First and second derivatives of $A(\eta)$ are related to the mean and the variance
+  \begin{myalign*}
+      \frac{d A(\eta)}{d \eta} = \E[\bm \phi(\eta)], \hspace{4pt} \frac{d^2 A(\eta)}{d \eta^2} = \V[\bm \phi(\eta)]
+  \end{myalign*}
+  \item $A(\eta)$ is convex
+  \item The generalized maximum likelihood cost to minimize is
+  \begin{myalign*}
+      \min_{\bm w} \L(\bm w) = - \sum_{n = 1}^N \log(p(y_n | \bm x^T_n \bm w))
+  \end{myalign*}
+  where $p(y_n | \bm x^T_n \bm w)$ is an exponential family distribution
+  \item We obtain the solution
+  \begin{myalign*}
+      \frac{d \L}{d \bm w} = \*X^T[\*g^{-1}(\bm \eta) - \bm \phi(\*y)]
+  \end{myalign*}
 \end{itemize}
 
 % ========================================================
@@ -547,9 +548,9 @@ $$
 	\begin{myalign*}
 	    f(\*x) = \frac{1}{k} \sum_{\*x_n \in nbh_k(\*x)} y_n
 	\end{myalign*}
-	where $nbh_k(\*x)$ is the neightborhood of $\*x$ defined by the k closest points $\*x_n$ in the training data
+	where $nbh_k(\*x)$ is the neightborhood of $\*x$ defined by the k closest points $\*x_n$.
 	\item \textbf{Curse of dimensionality}: Generalizing correctly becomes exponentially harder as the dimensionality grows.
-	\item Gathering more inputs variables may be a bad thing
+	\item Gathering more inputs variables may be bad
 \end{itemize}
 
 % ========================================================
