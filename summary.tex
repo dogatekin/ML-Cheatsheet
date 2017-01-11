@@ -907,15 +907,19 @@ such that columns of $\*W$ are orthogonal.
 
 % ======================================================== 
  
-\subsection{Convulotional NN} 
+\subsection{Convolutional NN} 
 
-{\color{red} WHAT CAN I SAY???}
+Sparse connections and \textit{weights sharing}: reduce complexity. (e.g. pixels in pictures only depend on neighbours)
 
 % ======================================================== 
  
 \subsection{Reg, Data Augmentation and Dropout}
 
-{\color{red} DO WE NEED SOMETHING IN THIS??}
+\begin{itemize}
+	\item Regularization term: $\frac{1}{2} \sum_{l=1}^{L+1} \mu^{(l)} || W ^{(l)} ||  ^{2} _{F}$
+	\item Data Augm.: e.g. shift or rotation of pics
+	\item Dropout: avoid overfit. Drop nodes randomly. (Then average multiple drop-NN)
+\end{itemize}
 
 % ========================================================
 
@@ -923,7 +927,7 @@ such that columns of $\*W$ are orthogonal.
 \begin{itemize}
 	\item Graph example: $p(x, y, z) = p(y | x) p(z | x) p(x)$ : $(y \leftarrow x \rightarrow z)$ 
 	\item \textbf{D-Separation} X and Y are D-separated by Z if every path from $ x \in X$ to $y \in Y$ is blocked by Z.
-	\item \textbf{Blocked Path} if the path contains a variable that
+	\item \textbf{Blocked Path} contains a variable that
 	\begin{itemize}
 		\item is in Z and is \textbf{head-to-tail} or \textbf{tail-to-tail}
 		\item the node is \textbf{head-to-head} and neither the node nor the descendant are in Z.
