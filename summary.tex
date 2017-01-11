@@ -639,21 +639,32 @@ $$
 	    k(\*x, \*x') = \bm \phi(\*x)^T \bm \phi(\*x')
 	\end{myalign*}
 	\item \textbf{Kernel trick}: 
+%	\begin{itemize}
+%		\item We can work directly with $\*K$ and never have to worry about $\*X$
+%		\item Replace $\langle \*x, \*x' \rangle$ with $k(\*x, \*x')$.
+%		\item Kernel function can be interpreted as a measure of similarity
+%		\item The evaluation of a kernel is usually faster with $k$ than with $\bm \phi$
+%	\end{itemize}
+%	\item Kernelized rigde regression might be computationally more efficient in some cases.
 	\begin{itemize}
-		\item We can work directly with $\*K$ and never have to worry about $\*X$
+		\item compute dot-product in $\mathbb{R}^m$ while remaining in $\mathbb{R}^n$
 		\item Replace $\langle \*x, \*x' \rangle$ with $k(\*x, \*x')$.
-		\item Kernel function can be interpreted as a measure of similarity
-		\item The evaluation of a kernel is usually faster with $k$ than with $\bm \phi$
 	\end{itemize}
-	\item Kernelized rigde regression might be computationally more efficient in some cases.
-	\item \textbf{Radial Basis function kernel (RBF)}
-	\begin{myalign*}
-	     k(\*x, \*x') = \exp(- \frac{1}{2}(\*x - \*x')^T (\*x - \*x'))
-	 \end{myalign*} 
-	\item Properties of a kernel to ensure the existance of a corresponding $\bm \phi$:
+	
+	\item \textbf{Common Kernel}
 	\begin{itemize}
-		\item $\*K$ should be symmetric: $k(\*x, \*x') = k(\*x', \*x)$
-		\item $\* K$ should be positive semidefinite.
+		\item Polynomial Kernel: $(\gamma \langle \*x_i, \*x_j \rangle + r) ^d$
+		\item Radial Basis function kernel (RBF)
+			\begin{myalign*}
+	    			 k(\*x, \*x') = \exp(- \frac{1}{2}(\*x - \*x')^T (\*x - \*x'))
+			 \end{myalign*} 
+		\item Sigmoid Kernel: $\tanh (\langle \*x_i, \*x_j \rangle + r)$ 
+	\end{itemize}
+	 
+	\item \textbf{Properties of kernels} to ensure the existance of a corresponding $\bm \phi$:
+	\begin{itemize}
+		\item symmetric: $k(\*x, \*x') = k(\*x', \*x)$
+		\item positive semi-definite.
 	\end{itemize}
 	\item Thus we get
 	\begin{myalign*}
