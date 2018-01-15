@@ -1,82 +1,73 @@
 % ========================================================
+% ========================================================
 
 \section{Math Prerequisites}
 
-% ========================================================
+\subsection{Derivatives }
+
 \begin{itemize}
-	\item Bayes rule
-	\[
-	     p(A, B) = \underbrace{p(A | B)}_{\text{Lik.}} \underbrace{p(B)}_{\text{Prior}} = \underbrace{p(B | A)}_{\text{Post}} \underbrace{p(A)}_{\text{Marg. Lik.}}
-	\]
-	\item Bayes rule: $P( A | B ) \propto P(B| A ) P(A) $
-    \item Gaussian distribution
-    \begin{myalign*}
-        \N(x | \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp(- \frac{(x - \mu)^2}{2 \sigma^2})
-    \end{myalign*}
-    \begin{myalign*}
-        \N(\* x | \bm \mu, \bm \Sigma) = \frac{1}{\sqrt{2 \pi |\bm \Sigma|}} \exp(- \frac{1}{2} (\*x - \bm \mu)^T \bm \Sigma^{-1} (\*x - \bm \mu))
-    \end{myalign*}
-    \item Production of independent variables:
-    \begin{myalign*}
-        \V(XY) = \E(X^2)\E(Y^2) - [\E(X)]^2 [\E(Y)]^2
-    \end{myalign*}
-    \item Covariance matrix of a data vector $\*x$
-    \begin{myalign*}
-        \*\Sigma = \frac{1}{N} \sum_{n = 1}^N (\*x_n - \E(\*x))(\*x_n - \E(\*x))^T
-    \end{myalign*}
+	\item $\partial \mathbf{x}^T \mathbf{a} = \partial \mathbf{a}^T \mathbf{x} = \mathbf{a}$
+	\item $\partial \*x^T\*A\*x = (\*A + \*A^T)\*x$
+	\item $\partial \mathbf{a}^T \mathbf{X} \mathbf{b} = \partial \mathbf{a}^T \mathbf{X}^T \mathbf{b} = \mathbf{a} \mathbf{b}^T$
+	\item $\partial \lVert \mathbf{x} \lVert^2_2 = 2\mathbf{x}$ and $\partial \lVert \mathbf{X} \lVert^2_2 = 2\mathbf{X}$
+	\item $\partial \lVert \mathbf{x}-\mathbf{a} \lVert_2 = \frac{\mathbf{x}-\mathbf{a}}{\lVert \mathbf{x}-\mathbf{a} \lVert_2}$
+	\item $\partial (\*b-\*A\*x)^T(\*b-\*A\*x) = -2\*A^T(\*b-\*A\*x)$
+	\item $\partial \lVert \mathbf{X} \lVert_2 =\lVert \mathbf{X}^T \lVert_2$
+	\item \textbf{Chain rule}:
+		\begin{myalign*}
+			\frac{\partial g(\mathbf{U}))}{\partial \mathbf{X}_{ij}} = \frac{\partial g(f(\mathbf{X})))}{\partial \mathbf{X}_{ij}} = tr[(\frac{\partial g(\mathbf{U})}{\partial \mathbf{U} })^T\frac{\partial f(\mathbf{X})}{\partial \mathbf{X}_{ij}}]
+		\end{myalign*}
+
+\end{itemize}
+
+\subsection{Linear Algebra}
+
+\begin{itemize}
+	\item $a_0 \*x_0 + \hdots + a_n \*x_n = \*X^T \*a$, $\*x_n$ are col of $\*X^T$
+    \item \textbf{positive definite} (pd) if $\*a^T \*V \*a > 0$
+	\item $(\*x-\*b)^T (\*x-\*b) = \lVert \*x - \*b \lVert^2_2 $
+\end{itemize}
+
+\subsection{Distributions}
+
+\begin{itemize}
+    \item \textbf{Gaussian}: $ \N(x | \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp(- \frac{(x - \mu)^2}{2 \sigma^2})$
+     $ \N(x | \mu, \Sigma^2) = \frac{\exp(-\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu))}{\sqrt{ (2 \pi)^D det(\Sigma)}} $
+    \item \textbf{Poisson}: $\text{P(k events in interval)} = e^{-\lambda} \frac{\lambda^k}{k!}$
+    \item \textbf{Bernoulli}:  $p(y | \mu) = \mu^y (1- \mu)^{1 - y}$
 \end{itemize}
 
 \subsection{Convexity}
+
+A function $f(x)$ is convex if
+ 
 \begin{itemize}
-\item A function $f(x)$ is convex, if for any $x_1, x_2 \in \* X$ and for any $0 \leq \lambda \leq 1$, we have :
-$$ f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2)$$
 
-%\item Strictly convex if the inequality is strict.
+    \item for any $\*x_1, \*x_2 \in \* X$ and $0 \leq \lambda \leq 1$, we have :
+        \begin{myalign*}
+            f(\lambda \*x_1 + (1 - \lambda) \*x_2) \leq \lambda f(\*x_1) + (1 - \lambda) f(\*x_2)
+        \end{myalign*}
+   \item it is a sum of convex functions
+   \item the Hessian $\*H$ is positive semi-definite
+	
+\end{itemize}
 
-%\item Sums of convex functions are also convex.
 
-%\item A function with the form log-sum-exp is convex.
+\subsection{Others}
 
-\item The Hessian of a convex function is psd and for a strictly-convex function it's pd.
-\begin{myalign*}
-      \*H_{i,j} = d^2 f /d x_i dx_j
- \end{myalign*}
+\begin{itemize}
+    \item Production of independent variables:
+        \begin{myalign*}
+            \V(xy) = \E(x^2)\E(y^2) - [\E(x)]^2 [\E(y)]^2
+        \end{myalign*}
+    \item Covariance matrix of a data vector $\*x$
+   		\begin{myalign*}
+   		    \*\Sigma = \frac{1}{N} \sum_{n = 1}^N (\*x_n - \E(\*x))(\*x_n - \E(\*x))^T
+   		\end{myalign*}
+	
 \end{itemize}
 
 % ========================================================
-
-\subsection{Linear Algebra}
-\begin{itemize}
-%\item Column $\*x \in \R^n$, rows $\*x^T$, matrix $\*A \in \R^{m \times n}$
-
-%\item $\*x^T \*x$ is a scalar, $\*x \*x^T$ is a matrix
-
-%\item $\*A^{-1}$ exist if $\*A$ is full rank
-
-%\item $(\*A \*B)^T = \*B^T \*A^T$
-
-\item \textbf{Condition number} 
-%of a function measures how much the output value can change for a small change in the input. A matrix with a high condition number is said to be \textbf{ill-conditioned}. 
-If $\*A$ is normal ($A^T A = A A^T$) then
-\begin{myalign*}
-    k(\*A) = 
-    \left|
-    	\frac{\lambda_{max}(\*A)}{\lambda_{min}(\*A)}
-    \right|
-\end{myalign*}
-
-\item A positive definite matrix is \textbf{symmetric} with all positive eigenvalues
-\item The real symmetric $N \times N$ matrix $\*V$ is said to be \textbf{positive semidefinite} if 
-\begin{myalign*}
-    \*a^T \*V \*a \geq 0
-\end{myalign*}
-for any real $N \times 1$ vector $a$.
-\item \textbf{positive definite} if $\*a^T \*V \*a > 0$
-%\item Cost of matrix inversion: $O(n^3) \rightarrow O(n^{2.372})$
-%\item $det(\*A)$ using LU decomposition: $O(n^3)$
-
-\end{itemize}
-
 % ========================================================
 \section{Cost functions}
 \begin{itemize}
@@ -86,7 +77,7 @@ for any real $N \times 1$ vector $a$.
 
 \textbf{Mean square error (MSE)}:
 \begin{myalign*}
-    MSE(\bm w ) = \sum^N_{n = 1} (y_n - f(\* x_n ))^2
+    MSE(\bm w ) = \frac{1}{N} \sum^N_{n = 1} (y_n - f(\* x_n ))^2
 \end{myalign*}
 
 \begin{itemize}
@@ -96,7 +87,7 @@ for any real $N \times 1$ vector $a$.
 
 \textbf{Mean Absolute Error (MAE)}:
 \begin{myalign*}
-    MAE = \sum^N_{n = 1} |y_n - f(\* x_n)|
+    MAE = \frac{1}{N} \sum^N_{n = 1} |y_n - f(\* x_n)|
 \end{myalign*}
 
 \textbf{Huber loss}
@@ -125,43 +116,24 @@ for any real $N \times 1$ vector $a$.
 \end{myalign*}
 Non-convex, non-diff., but robust to outliers.
 
-
-\textbf{Hinge loss}
-\begin{myalign*}
-    Hinge = [1 - y_n f(\* x_n)]_+ = \max(0, 1 - y_n f(\* x_n))
-\end{myalign*}
-
-\textbf{Logistic loss}
-\begin{myalign*}
-    Logistic =  \log(1 - \exp(y_n f(\* x_n)))
-\end{myalign*}
+\textbf{Hinge loss}: $[1 - y_n f(\* x_n)]_+ = \max(0, 1 - y_n f(\* x_n))$ \\
+\textbf{Logistic loss}: $ \log(1 - \exp(y_n f(\* x_n)))$
 
 
 % ========================================================
 
 \section{Regression}
 \begin{itemize}
-    \item \textbf{Data} consists of N pairs $(y_n, \*x_n)$
-    \begin{enumerate}
-        \item $y_n$ the n'th output
-        \item $\*x_n$ is a vector of D inputs
-    \end{enumerate}
+	\item Model that assume linear relationship
+	\begin{myalign*}
+	  \*y_n & \approx f(\* x_n) := \*w_0 + \*w_1 \*x_{n1} + ... = \*w_0 + \*x^T_n \*w \\
+			&\approx \tilde{\* x}_n^T \*w \text{ ,where $\tilde{x}$ contains offset comp.}
+	\end{myalign*}
+	
+	
     \item \textbf{Prediction}: predict the ouput for a new input vector.
-
     \item \textbf{Interpretation}: understand the effect of inputs on output.
 
-    \item \textbf{Outliers} are data that are far away from most of the other examples.
-\end{itemize}
-% ========================================================
-
-\subsection{Linear Regression}
-\begin{itemize}
-	\item Model that assume linear relationship between inputs and the ouput.
-\begin{myalign*}
-  y_n &\approx f(\* x_n) := w_0 + w_1 x_{n1} + ... = \w_0 + \*x^T_n \bm w
-\end{myalign*}
-with $\bm w$ the parameters of the model.
-\item Variance grows only linearly with dimensionality
 \end{itemize}
 
 % ========================================================
@@ -173,24 +145,39 @@ with $\bm w$ the parameters of the model.
 
 % ========================================================
 
-\subsection{Gradient Descent}
+\subsection{GD - Gradient Descent (Batch)}
 \begin{itemize}
 	\item GD uses only first-order information and takes steps in the opposite direction of the gradient
-	\item Given cost function $\L(\bm w)$ we want to find $\bm w$
+	\item Given cost function $\L(\*w)$ we want to find $\* w$
 	\begin{myalign*}
-	    \bm w = \arg\min_{\bm w} \L(\bm w)
+	    \*w = \arg\min_{\*w} \L(\*w)
 	\end{myalign*}
+    \item Take steps in the opposite direction of the gradient
+   	\begin{myalign*}
+	    \*w^{(t + 1)} \leftarrow \*w^{(t)} - \gamma \bm \nabla \L(\*w^{(t)})
+   	\end{myalign*}
+
+    \item With $\gamma$ too big, method might diverge. With $\gamma$ too small, convergence is slow.
 \end{itemize}
+
 
 % ========================================================
 
-\subsection{Batch Gradient Descent}
-\begin{itemize}
-    \item Take steps in the opposite direction of the gradient
-    $$ \bm w^{(t + 1)} \leftarrow \bm w^{(t)} - \gamma \bm \nabla \L(\bm w^{(t)})$$
-    with $\gamma > 0$ the learning rate. 
-    \item With $\gamma$ too big, method might diverge. With $\gamma$ too small, convergence is slow.
-\end{itemize}
+\subsection{SGD - Stochastic Gradient Descent}
+
+In ML, most cost functions are formulated as a sum over the training examples:
+$$ \L(\*w) = \frac{1}{N}\sum_{n=1}^N\L_n(\*w)$$
+$\Rightarrow$ SGD update rule (only n-th training exam.):
+$$ \*w^{(t + 1)} \leftarrow \*w^{(t)} - \gamma \bm \nabla \L_n(\*w^{(t)})$$
+\emph{Idea}: Cheap but unbiased estimate of grad. $$\E[\bm\nabla\L_n(\*w)] = \bm \nabla(\*w)$$
+
+% ========================================================
+
+\subsection{Mini-batch SGD}
+
+Update direction ($B \subseteq [N]$):
+$$\bm g^{(t)} := \frac{1}{|B|} \sum_{n\in B} \bm \nabla \L_n(\* w^{(t)}) $$ 
+Update rule : $ \* w^{(t + 1)} \leftarrow \* w^{(t)} - \gamma \* g^{(t)}$ 
 
 % ========================================================
 
@@ -198,53 +185,57 @@ with $\bm w$ the parameters of the model.
 \begin{itemize}
     \item We define the error vector $\* e$:
     \begin{myalign*}
-        \*e := \* y - \*{X} \bm w
+        \*e := \* y - \*{X} \*w
     \end{myalign*}
     \item and MSE as follows:
     \begin{myalign*}
-        \L(\bm w) = \frac{1}{2N} \sum^N_{n = 1} (y_n - \*{\tilde{x}}_n^T \bm w)^2 = \frac{1}{2N} \*e^T \*e
+        \L(\* w) = \frac{1}{2N} \sum^N_{n = 1} (\*y_n - \*{\tilde{x}}_n^T \* w)^2 = \frac{1}{2N} \*e^T \*e
     \end{myalign*}
     \item then the gradient is given by
     \begin{myalign*}
-        \bm \nabla \L(\bm w) = - \frac{1}{N} \*{X}^T \*e
+        \bm \nabla \L(\* w) = - \frac{1}{N} \*{X}^T \*e
     \end{myalign*}
 
     \item Optimality conditions:
     \begin{enumerate}
-        \item \textit{necessary}: gradient equal zero: $\frac{d \L(\bm w^*)}{d \bm w} = 0$
-        \item \textit{sufficient}: Hessian matrix is positive definite: $\* H(\bm w^*) = \frac{d^2 \L(\bm w^*)}{d \bm w d \bm w^T}$
+        \item \textit{necessary}: gradient equal zero: $\frac{d \L(\*w^*)}{d \*w} = 0$
+        \item \textit{sufficient}: Hessian matrix is positive definite: $\* H(\*w^*) = \frac{d^2 \L(\*w^*)}{d \*w d \*w^T}$
     \end{enumerate}
 
     \item Very sensitive to illconditioning $\Rightarrow$ always normalize features.
     \item \textit{Complexity}: $O(NDI)$ with $I$ the number of iterations
 \end{itemize}
 
-% ========================================================
 
-\subsection{Stochastic Gradient Descent}
-
-In ML, most cost functions are formulated as a sum over the training examples:
-$$ \L(\bm w) = \frac{1}{N}\sum_{n=1}^N\L_n(\bm w)$$
-$\Rightarrow$ SGD algo is given by update rule:
-$$ \bm w^{(t + 1)} \leftarrow \bm w^{(t)} - \gamma \bm \nabla \L_n(\bm w^{(t)})$$
-\emph{Idea}: Cheap but unbiased estimate of grad. $$\E[\bm\nabla\L_n(\bm w)] = \bm \nabla(\bm w)$$
-
-% ========================================================
-
-\subsection{Mini-batch SGD}
-
-Update direction ($B \subseteq [N]$):
-$$\bm g^{(t)} := \frac{1}{|B|} \sum_{n\in B} \bm \nabla \L_n(\bm w^{(t)}) $$ 
-Update rule : $ \bm w^{(t + 1)} \leftarrow \bm w^{(t)} - \gamma \bm g^{(t)}$ 
-
-% ========================================================
 
 \subsection{Subgradients (Non-Smooth OPT)}
 
-A vector $\bm g\in \R^D$ s.t.
-$$ \L(\bm u) \geq \L(\bm w) + \bm g^T(\bm u - \bm w) \quad \forall \bm u $$
-is the subgradient to $\L$ at $\bm w$.
-If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
+A vector $\* g\in \R^D$ s.t.
+$$ \L(\* u) \geq \L(\* w) + \* g^T(\* u - \* w) \quad \forall \* u \in \R^D $$
+is the subgradient to $\L$ at $\* w$.
+If $\L$ is differentiable at $\* w$, we have $\* g = \bm \nabla \L(\* w)$
+% ========================================================
+
+\subsection{Constrained Optimization}
+Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
+
+\begin{itemize}
+    \item Add proj. onto $\mathcal{C}$ after each step:
+    \begin{myalign*}
+    	P_{\mathcal{C}}(\*w') = \arg\min \lvert \*v-\*w' \lvert \text{, } \*v \in\mathcal{C}
+    \end{myalign*}
+    \begin{myalign*}
+       	\*w^{(t+1)} = P_{\mathcal{C}}[\*w^{(t)} - \gamma \nabla \L (\*w^{(t)})]
+    \end{myalign*}
+    \item Use penalty functions
+    \begin{itemize}
+    \item $ \min \L(\*w) + I_{\mathcal{C}}, I_{\mathcal{C}}=0\text{ if } \*w \in \mathcal{C} \text{, ow } +\infty$
+    \item $\min \L(\*w) + \lambda \lvert \*A\*w - \*b \lvert$
+    \end{itemize}
+    \item Stopping criteria when $\L(\*w)$ close to 0
+    
+\end{itemize}
+
 % ========================================================
 
 \section{Least Squares}
@@ -253,15 +244,15 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 
     \item Use the first optimality conditions:
     \begin{myalign*}
-        \bm \nabla L(\bm w^*)= 0 \Rightarrow \*X^T \*e = \*X^T (\*y - \*X \bm w)=  0
+        \bm \nabla L(\* w^*)= 0 \Rightarrow \*X^T \*e = \*X^T (\*y - \*X \* w)=  0
     \end{myalign*}
     \item When $\*X^T\*X$ is invertible, we have the closed-form expression
     \begin{myalign*}
-        \bm w^* = (\*X^T\*X)^{-1} \*X^T \*y
+        \* w^* = (\*X^T\*X)^{-1} \*X^T \*y
     \end{myalign*}
     \item thus we can predict values for a new $\* x_m$
     \begin{myalign*}
-        y_m := \*{x^T_m} \bm w^* = \*{x^T_m}(\*X^T\*X)^{-1} \*X^T \*y
+        \*y_m := \*{x^T_m} \* w^* = \*{x^T_m}(\*X^T\*X)^{-1} \*X^T \*y
     \end{myalign*}
     \item The \textbf{Gram matrix} $\*X^T\*X$ is pd and is also invertible iff $\*X$ has full column rank.
     
@@ -272,125 +263,52 @@ If $\L$ is differentiable at $\bm w$, we have $\bm g = \bm \nabla \L(\bm w)$
 
 % ========================================================
 
-\section{Maximum Likelihood}
+\section{Maximum Likelihood (MLE)} 
 \begin{itemize}
     \item Let define our mistakes $\epsilon_n \sim \N(0, \sigma^2)$.
     \begin{myalign*}
-        \rightarrow y_n = \*{x}_n^T \bm w + \epsilon_n
+        \rightarrow \*y_n = \*{x}_n^T \* w + \epsilon_n
     \end{myalign*}    
     \item Another way of expressing this:
     \begin{myalign*}
-        p(\*y | \*{X, \bm w}) &= \prod_{n = 1}^N p(y_n | \*{x}_n, \bm w)\\
-        &= \prod_{n = 1}^N \N(y_n | \*{x}_n^T \bm w, \sigma^2)
+        p(\*y | \*{X, \* w}) &= \prod_{n = 1}^N p(\* y_n | \*{x}_n, \*w)\\
+        &= \prod_{n = 1}^N \N(\*y_n | \*{x}_n^T \* w, \sigma^2)
     \end{myalign*}
     which defines the likelihood of observating $\* y$ given $\*X$ and $\bm w$
     \item Define cost with log-likelihood
     \begin{myalign*}
-        \L_{lik}(\bm w) &= \log p(\*y | \*X, \bm w)\\
-        &= - \frac{1}{2 \sigma^2} \sum^N_{n = 1} (y_n - \*{x}_n^T \bm w)^2 + cnst
+        \L_{MLE}(\bm w) &= \log p(\*y | \*X, \*w)\\
+        &= - \frac{1}{2 \sigma^2} \sum^N_{n = 1} (\*y_n - \*{x}_n^T \*w)^2 + cnst
     \end{myalign*}
     \item Maximum likelihood estimator (MLE) gives another way to design cost functions
     \begin{myalign*}
-        \argmin_{\bm w} \L_{MSE}(\bm w) = \argmax_{\bm w} \L_{lik}(\bm w)
+        \argmin_{\* w} \L_{MSE}(\* w) = \argmax_{\*w} \L_{MLE}(\*w)
     \end{myalign*}
     \item MLE can also be interpreted as finding the model under which the observed data is most likely to have been generated from.
-    \item With Laplace distribution
-    \begin{myalign*}
-        p(y_n | \*{x}_n, \bm w) = \frac{1}{2b} e^{-\frac{1}{b}|y_n - \*{x}_n^T \bm w|}
-    \end{myalign*}
-    \begin{myalign*}
-        \sum_n \log p(y_n | \*{x}_n, \bm w) = \sum_n |y_n - \*{x}_n^T \bm w| + cnst
-    \end{myalign*}
+    \item $\*w_{\text{MLE}} \rightarrow \*w_{\text{true}}$ for large amount of data
 
 \end{itemize}
 
+
 % ========================================================
 
-\section{Ridge Regression}
+\section{Ridge Regression (RR)}
 \begin{itemize}
-    \item Linear models usually overfit. One way is to use nonlinear basis functions instead.
+    \item Linear models usually overfit. We can penalize them with a \textbf{regularization term}
     \begin{myalign*}
-        y_n = w_0 + \sum_{j = 1}^M w_j \phi_j(\*x_n) = \bm{\tilde{\phi}}(\*x_n)^T \bm w
-    \end{myalign*}
-    \item This model is linear in $\bm w$ but nonlinear in $\*x$. Dimension is now M, not N.
-    \item Polynomial basis
+        \min_{\bm w} \L(\* w) + \Omega(\*w) 
+    \end{myalign*}    
+    \item $L_2$-Reg. (Ridge): $\Omega(\*w) = \lambda \lVert \*w \lVert_2^2$
+    \item $\rightarrow$ small values of $\*w_i$, not sparse
+    \item $\rightarrow$ $\*w^{\star} = (\*X^T\*X + \lambda ' \*I)^{-1}\*X^T\*y$ with $\lambda ' = 2N\lambda$
+    \item $\rightarrow$ No ill cond., $(\*X^T\*X + \lambda ' \*I)^{-1}$ exists
+    \item $L_1$-Reg. (Lasso): $\Omega(\*w) = \lambda \lVert \*w \lVert_1$
+    \item $\rightarrow$ large values of $\*w_i$, sparse
+    \item Maximum-a-posteriori (MAP)
     \begin{myalign*}
-        \bm \phi(x_n) = [1, x_n , x_n^2 , ..., x_n^M]
-    \end{myalign*}
-    \item The least square solution becomes
-    \begin{myalign*}
-        \bm w^*_{lse} = (\bm{\tilde{\Phi}}^T\bm{\tilde{\Phi}})^{-1}\bm{\tilde{\Phi}}^T \*y
-    \end{myalign*}
-
-    \item Complex models overfit easily. THus we can penalize them with a \textbf{regularization term}
-    \begin{myalign*}
-        \min_{\bm w} 
-        \left( 
-        	\L(\bm w) + \frac{\lambda}{2N} \sum^M_{j = 1} w_j^2 
-        \right)
-    \end{myalign*}
-
-    \begin{myalign*}
-        \bm w^* = \argmin_{\bm w} 
-        \left(
-        	\frac{1}{2}(\*y - \*X \bm w)^T(\*y - \*X \bm w) + \frac{\lambda}{2} \bm w^T \bm w
-        \right)
-    \end{myalign*}
-
-    \item Note that $w_0$ is not penalized.
-    \item By differentiating and setting to zero we get
-    \begin{myalign*}
-        \bm w_{ridge} = (\bm{\tilde{\Phi}}^T\bm{\tilde{\Phi}} + \bm{\Lambda})^{-1} \bm{\tilde{\Phi}}^T \*y
-    \end{myalign*}
-    \begin{myalign*}
-        \bm{\Lambda} = 
-        \left[
-            \begin{array}{c c}
-                0 & \underline{0}  \\
-                \underline{0} & \lambda I_m
-            \end{array}
-        \right]
-    \end{myalign*}
-    \item Ridge regression improves the condition number of the Gram matrix since the eigenvalues of $(\bm{\tilde{\Phi}}^T\bm{\tilde{\Phi}} + \lambda I_m)$ are at least $\lambda$ %LEARN
-
-    \item \textbf{Maximum-a-posteriori (MAP) estimator}: %LEARN
-	     \begin{itemize}
-	     	\item Maximizes the product of the likelihood \textit{and} the \textbf{prior}.
-	     	\begin{myalign*}
-	     	     \bm w_{MAP} = \argmax_{\bm w} 
-	     	     \left(
-	     	     	p(\*y | \*X, \bm \Lambda)p(\bm w | \bm \Sigma)
-	     	     \right)
-	     	 \end{myalign*} 
-	     	\item Assume $w_0 = 0$
-	     	\end{itemize}
-	     	\end{itemize}
-$$
-    \bm w_{ridge} = \argmax_{\bm w}
-    \left(
-	    \log 
-	    \left[
-		\prod_{n = 1}^N \N(y_n | \*x^T_n \bm w, \bm \Lambda) \times \N(\bm w | 0, \*I)
-	    \right]
-	\right)
-$$
-	\begin{itemize}
-	\item \textbf{Lasso regularizer} forces some $w_i$ to be strictly 0 and therefore forces sparsity in the model.
-	\begin{myalign*}
-	    \min_{\bm w} \frac{1}{2 N} \sum_{n = 1}^N(y_n - \bm{\tilde{\phi}}(\*x_n)^T \bm w)^2, \hspace{10pt} \\\text{ such that } \sum_{i = 1}^M |w_i| \leq \tau
-	\end{myalign*}
+        \*w = \argmin_{\* w} \sum^N \frac{1}{2\sigma^2}(\*y_n - \*x^T \*w)^2 + \frac{\lambda}{2} \lVert\*w \lVert^2
+    \end{myalign*}   
 \end{itemize}
-
-% ========================================================
-
-
-%\section{Cross-Validation}
-%\begin{itemize}
-%	\item We should choose $\lambda$ to minimize the mistakes that will be made in the future.
-%	\item We split the data into train and validation sets and we pretend that the validation set is the future data. We fit our model on the training set and compute a prediction-error on the validation set. This gives us an \textit{estimate} of the \textit{generalization error}.
-%	\item \textbf{K-fold cross validation} randomly partition the data into $K$ groups. We train on $K - 1$ groups and test on the remaining group. We repeat this until we have tested on all $K$ sets. We then average the results.
-%	\item Cross-validation returns an unbiased estimate of the generalization error and its variance.
-%\end{itemize}
 
 % ========================================================
 
@@ -417,10 +335,9 @@ $$
 
 \section{Logistic Regression}
 
-% ========================================================
 \begin{itemize}
-	\item \textbf{Classification} relates input variables $\*x$ to discrete output variable $y$
-	\item \textbf{Binary classifier}: we use $y = 0$ for $\*C_1$ and $y = 1$ for $\*C_2$.
+	\item \textbf{Classification} relates input variables $\*x$ to discrete output variable $\*y$
+	\item \textbf{Binary classifier}: we use $y = 0$ for $\*C_1$ and $\*y = 1$ for $\*C_2$.
 	\item Can use least-squares to predict $\hat{y}_*$
 	\begin{myalign*}
 	    \hat{y} = 
@@ -436,19 +353,17 @@ $$
 	    \sigma(x) = \frac{\exp(x)}{1 + \exp(x)}
 	\end{myalign*}
 	\begin{myalign*}
-	    p(y_n = \*C_1| \*x_n) = \sigma(\bm x^T \bm w)\\
-	    p(y_n = \*C_2 | \*x_n) = 1 - \sigma(\bm x^T \bm w)
+	    p(\*y_n = \*C_1| \*x_n) = \sigma( \*x^T \*w)\\
+	    p(\*y_n = \*C_2 | \*x_n) = 1 - \sigma( \*x^T \*w)
 	\end{myalign*}
 	\item The probabilistic model:
 	\begin{myalign*}
-	    p(\*y | \*X, \bm w) = \prod_{n = 1}^N \sigma(\bm x_n^T \bm w)^{y_n}(1 - \sigma(\bm x_n^T \bm w))^{1 - y_n}
+	    p(\*y | \*X, \* w) = \prod_{n = 1}^N \sigma( \*x_n^T \* w)^{\*y_n}(1 - \sigma(\* x_n^T \* w))^{1 - \*y_n}
 	\end{myalign*}
-	\item The log-likelihood:
+	\item The log-likelihood (w.r.t. MLE):
 	\begin{myalign*}
-	    \L_{MLE}(\bm w) = \sum_{n = 1}^N
-	    \left(
-	    	y_n \bm x_n^T \bm w - \log(1 + \exp(\bm x_n^T \bm w))
-	    \right)
+	    \L(\* w) &= - \sum_{n = 1}^N \*y_n \ln \sigma(\*x_n^T \*w)  + (1-\*y_n)\ln(1- \sigma(\*x_n^T \*w))\\
+	    &=  \sum_{n = 1}^N  \ln[1 + \exp(\*x_n^T \* w) ]-  \*y_n \*x_n^T\*w
 	\end{myalign*}
 	\item We can use the fact that
 	\begin{myalign*}
@@ -456,11 +371,8 @@ $$
 	\end{myalign*}
 	\item Gradient of the log-likelihood %LEARN
 	\begin{myalign*}
-	    \*g = \frac{d \L}{d \bm w} &= \sum_{n = 1}^N 
-	    \left( 
-	    	\bm x_n y_n - \bm x_n \sigma(\bm x_n^T \bm w)
-	    	\right) \\
-	    &= - \*X^T[\sigma(\*X \bm w) - \*y]
+	    \*g = \bm \nabla \L (\* w) &= \sum_{n = 1}^N  \*x_n( \sigma(\* x_n^T \* w) - \*y_n) \\
+	    &= \*X^T[\sigma(\*X \bm w) - \*y]
 	\end{myalign*}
 	\item The negative of the log-likelihood $- \L_{mle}(\bm w)$ is convex
 	\item \textbf{Hessian} of the log-likelihood
@@ -471,60 +383,69 @@ $$
 		\end{myalign*}
 		\item Hessian is the derivative of the gradient
 		\begin{myalign*}
-		    \*H(\bm w) &= - \frac{d \*g(\bm w)}{d \bm w^T}  = \sum_{n = 1}^N \frac{d}{d \bm w^T} \sigma(\bm x_n^T \bm w) \bm x_n\\
-		    &= \sum_{n = 1}^N \bm x_n \sigma(\bm x_n^T \bm w)(1 - \sigma(\bm x_n^T \bm w)) \bm x_n^T\\
+		    \*H(\* w) &= - \frac{d \*g(\* w)}{d \* w^T}  = \sum_{n = 1}^N \frac{d}{d \* w^T} \* x_n \sigma(\* x_n^T \* w) \\
+		    &= \sum_{n = 1}^N \* x_n \* x_n^T \sigma(\* x_n^T \* w)(1 - \sigma(\* x_n^T \* w)) \\
 		    &= \tilde{\*X}^T \*S \tilde{\*X}
 		\end{myalign*}
 		where $\*S$ is a $N \times N$ diagonal matrix with diagonals
 		\begin{myalign*}
-		    S_{nn} = \sigma(\bm x_n^T \bm w)(1 - \sigma(\bm x_n^T \bm w))
+		    S_{nn} = \sigma(\* x_n^T\* w)(1 - \sigma(\* x_n^T \* w))
 		\end{myalign*}
 		\item The negative of the log-likelihood is not strictly convex.
 	\end{itemize}
 	\item \textbf{Newton's Method} %LEARN
 	\begin{itemize}
-		\item Uses second-order information and takes steps in the direction that minimizes a quadratic approximation
+		\item Uses second-order information and takes steps in the direction that minimizes a quadratic approximation (Taylor)
 		\begin{myalign*}
-		    \L(\bm w) = \L(\bm w^{(k)}) + \*\nabla\L_k^T (\bm w - \bm w^{(k)})\\ + (\bm w - \bm w^{(k)})^T \*H_k(\bm w - \bm w^{(k)})
+		    \L(\*w) = \L(\* w^{(k)}) + \*\nabla\L_k^T (\*w - \* w^{(k)})\\ + (\* w - \* w^{(k)})^T \*H_k(\* w - \* w^{(k)})
 		\end{myalign*}
 		and it's minimum is at
 		\begin{myalign*}
-		    \bm w^{k + 1} = \bm w^{(k)} - \gamma_k \*H_k^{-1}\*\nabla\L_k
+		    \* w^{k + 1} =\* w^{(k)} - \gamma_k \*H_k^{-1}\*\nabla\L_k
 		\end{myalign*}
 		\item Complexity: $O((ND^2 + D^3)I)$
 	\end{itemize}
-	\item \textbf{Penalized Logistic Regression}
+	\item \textbf{Regularized Logistic Regression}
 	\begin{myalign*}
-	    \min_{\bm w} 
-	    \left(
-	    	- \sum_{n = 1}^N \log p(y_n | \*x_n^T \bm w) + \lambda \sum_{d = 1}^D w^2_d
-	    \right)
-	\end{myalign*}
+	    \argmin_{\*w} 
+	    	- \sum_{n = 1}^N \ln p(\*y_n | \*x_n^T \* w) + \frac{\lambda}{2} \lVert \*w \lVert^2
+	    \end{myalign*}
 \end{itemize}
 
 % ========================================================
-\section{Generalized Linear Model}
-\textbf{Exponential family distribution}
-\begin{myalign*}
-    p(\*y | \bm \eta) = \frac{h(y)}{Z} \exp(\bm \eta^T \bm \phi(\*y) - A(\bm \eta))
-\end{myalign*}
+\section{Exponential family distribution \& Generalized Linear Model}
+
+
 \begin{itemize}
-      \item Bernoulli distribution
+	  \item Exponential family distribution
+		\begin{myalign*}
+		    p(\*y | \bm \eta) = h(y) \exp(\bm \eta^T \bm \phi(\*y) - A(\bm \eta))
+		\end{myalign*}
+      \item {\bf Bernoulli} distribution example
       \begin{myalign*}
-	  p(y | \mu) &= \mu^y (1- \mu)^{1 - y}\\
-	  &= \exp(y \log(\frac{\mu}{1 - \mu} + \log(1 - \mu)))
+	  \rightarrow \exp( \log(\frac{\mu}{1 - \mu})y + \log(1 - \mu)))
       \end{myalign*}
-      \item there is a relationship between $\eta$ and $\mu$ throught the \textbf{link function}
+      (i) there is a relationship between $\eta$ and $\mu$ throught the \textbf{link function}
       \begin{myalign*}
 	  \eta = \log(\frac{\mu}{1 - \mu}) \leftrightarrow \mu = \frac{e^{\eta}}{1 + e^{\eta}}
       \end{myalign*}
-      \item Note that $\mu$ is the mean parameter of $y$
-\end{itemize}
-\begin{itemize}
-  \item Relationship between the mean $\bm \mu$ and $\bm \eta$ is defined using a link function $g$
-  \begin{myalign*}
-      \bm \eta = \*g(\bm \mu) \Leftrightarrow \bm \mu = \*g^{-1}(\bm \eta)
-  \end{myalign*}
+      (ii) Note that $\mu$ is the mean parameter of $y$
+      (iii) Relationship between the mean $\bm \mu$ and $\bm \eta$ is defined using a link function $g$
+        \begin{myalign*}
+            \bm \eta = \*g(\bm \mu) \Leftrightarrow \bm \mu = \*g^{-1}(\bm \eta)
+        \end{myalign*}
+      \item {\bf Gaussian} distribution example
+      \begin{myalign*}
+	  \exp( (\frac{\mu}{2\sigma^2}, \frac{-1}{2\sigma^2})(y, y^2)^T - \frac{\mu^2}{2\sigma^2}-\frac{1}{2}\ln(2\pi \sigma^2))
+      \end{myalign*}
+      (i) link function
+      \begin{myalign*}
+	  \eta = (\eta_1 = \mu/\sigma^2, \eta_2 = -1/(2\sigma^2))^T
+      \end{myalign*}
+      \begin{myalign*}
+      	  \mu = -\eta_1/(2\eta_2) \text{ ; } \sigma^2 = -1/(2\eta_2)
+      \end{myalign*}
+      
   \item First and second derivatives of $A(\eta)$ are related to the mean and the variance
   \begin{myalign*}
       \frac{d A(\eta)}{d \eta} = \E[\bm \phi(\eta)], \hspace{4pt} \frac{d^2 A(\eta)}{d \eta^2} = \V[\bm \phi(\eta)]
@@ -532,12 +453,12 @@ $$
   \item $A(\eta)$ is convex
   \item The generalized maximum likelihood cost to minimize is
   \begin{myalign*}
-      \min_{\bm w} \L(\bm w) = - \sum_{n = 1}^N \log(p(y_n | \bm x^T_n \bm w))
+      \min_{\* w} \L(\* w) = - \sum_{n = 1}^N \log(p(\*y_n | \*x^T_n \* w))
   \end{myalign*}
-  where $p(y_n | \bm x^T_n \bm w)$ is an exponential family distribution
+  where $p(\*y_n | \* x^T_n \* w)$ is an exponential family distribution
   \item We obtain the solution
   \begin{myalign*}
-      \frac{d \L}{d \bm w} = \*X^T[\*g^{-1}(\bm \eta) - \bm \phi(\*y)]
+      \frac{d \L}{d \* w} = \*X^T[\*g^{-1}(\*X \*w ) - \bm \phi(\*y)]
   \end{myalign*}
 \end{itemize}
 
@@ -547,7 +468,7 @@ $$
 \begin{itemize}
 	\item The k-NN prediction for $\*x$ is
 	\begin{myalign*}
-	    f(\*x) = \frac{1}{k} \sum_{\*x_n \in nbh_k(\*x)} y_n
+	    f(\*x) = \frac{1}{k} \sum_{\*x_n \in nbh_k(\*x)} \*y_n
 	\end{myalign*}
 	where $nbh_k(\*x)$ is the neightborhood of $\*x$ defined by the k closest points $\*x_n$.
 	\item \textbf{Curse of dimensionality}: Generalizing correctly becomes exponentially harder as the dimensionality grows.
@@ -568,46 +489,54 @@ $$
 	\item Assume $y_n \in \{-1, 1\}$
 	\item SVM optimizes the following cost
 	\begin{myalign*}
-	    \L(\bm w) = \min_{\bm w} \sum_{n = 1}^N [1 - y_n \tilde{\bm \phi}_n^T \bm w]_+ + \frac{\lambda}{2} \sum_{j = 1}^M w^2_j
+	    \L(\* w) = \min_{\* w} \sum_{n = 1}^N [1 - \*y_n \tilde{\* \phi}_n^T \* w]_+ + \frac{\lambda}{2} \lVert \*w \lVert^2
 	\end{myalign*}
-	\item Minimum doesn't change with a rescaling of $\bm w$
+	\item Minimum doesn't change with a rescaling of $\* w$
 	\item choose the hyperplane so that the distance from it to the nearest data point on each side is maximized
 	\item \textbf{Duality}:
 	\begin{itemize}
-		\item Hard to minimize $g(\bm w)$ so we define
+		\item Hard to minimize $g(\* w)$ so we define
 		\begin{myalign*}
-		    \L(\bm w) = \max_{\bm \alpha} G(\bm w, \bm \alpha)
+		    \L(\* w) = \max_{\bm \alpha} G(\* w, \bm \alpha)
 		\end{myalign*}
 		\item we use the property that
 		\begin{myalign*}
-		    C[v_n]_+ = \max(0, C v_n) = \max_{\alpha_n \in [0, C]} \alpha_n v_n
+		    [\*v_n]_+ = \max(0, \*v_n) = \max_{\alpha_n \in [0, 1]} \alpha_n \*v_n
 		\end{myalign*}
 		\item We can rewrite the problem as
 		\begin{myalign*}
-		    \min_{\bm w} \max_{\bm \alpha \in [0, C]^N} \sum_{n = 1}^N \alpha_n (1 - y_n \bm \phi_n^T \bm w) + \frac{1}{2} \sum_{j = 1}^M w_j^2
+		    \min_{\* w} \max_{\alpha} \sum_{n = 1}^N \alpha_n (1 - \*y_n \bm \phi_n^T \* w) + \frac{\lambda}{2} \lVert \*w \lVert_2^2 
 		\end{myalign*}
 		\item This is differentiable, convex in $\bm w$ and concave in $\bm \alpha$
 		\item \textbf{Minimax theorem}: 
 		\begin{myalign*}
-		    \min_{\bm w} \max_{\bm \alpha} G(\bm w, \bm \alpha) = \max_{\bm \alpha} \min_{\bm w} G(\bm w, \bm \alpha)
+		    \min_{\* w} \max_{\bm \alpha} G(\* w, \bm \alpha) = \max_{\bm \alpha} \min_{\* w} G(\* w, \bm \alpha)
 		\end{myalign*}
-		because $G$ is convex in $\bm w$ and concave in $\bm \alpha$.
-		\item Derivative w.r.t. $\bm w$:
+		because $G$ is convex in $\* w$ and concave in $\bm \alpha$.
+		\item Derivative w.r.t. $\* w$:
 		\begin{myalign*}
-		    \bm \nabla_{\bm w} G(\bm w, \bm \alpha) = - \sum_{n=1}^N\alpha_n y_n\bm x_n + \lambda \bm w
+		    \bm \nabla_{\* w} G(\* w, \bm \alpha) = - \sum_{n=1}^N\alpha_n \*y_n \* x_n + \lambda \* w
 		\end{myalign*}
 		\item Equating this to 0, we get:
 			\begin{myalign*}
-			  \bm w(\bm \alpha) = \frac{1}{\lambda} \sum_{n=1}^N \alpha_n y_n \bm x_n = \frac{1}{\lambda} \*{X}\*{Y}\bm \alpha \\
+			  \* w(\bm \alpha) = \frac{1}{\lambda} \sum_{n=1}^N \alpha_n \*y_n \*x_n = \frac{1}{\lambda} \*{X}^T\*{Y}\bm \alpha \\
 			  \*{Y} := \text{diag}(\bm y)
 			\end{myalign*}
-		\item Plugging $\bm w^*$ back in the dual problem
+		\item Plugging $\* w^*$ back in the dual problem
 		\begin{myalign*}
-		    \max_{\bm \alpha \in [0, 1]^N} \bm \alpha^T \*1 - \frac{1}{2\lambda} \bm \alpha^T \*Y \bm X^T \bm X \* Y \bm \alpha
+		    \max_{\bm \alpha \in [0, 1]^N} \bm \alpha^T \*1 - \frac{1}{2\lambda} \bm \alpha^T \*Y \* X  \*X^T \* Y \bm \alpha
 		\end{myalign*}
 		\item This is a differentiable least-squares problem. Optimization is easy using Sequential Minimal Optimization. It is also naturally kernelized with $\*K = \bm X^T \bm X$
 		\item The solution $\bm \alpha$ is sparse and is non-zero only for the training examples that are instrumental in determining the decision boundary.
+		\item $\bm \alpha$ is the slope of lines that are lower bound to Hinge loss
 	\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+	\item {\bf Non support vector}: Example that lies on the correct side, outside margin $\bm \alpha_n = 0$
+	\item {\bf Essen. support vector}: Example that lies on the margin $\bm \alpha_n \in (0,1)$
+	\item {\bf Bound support vector}: Example that lies strictly inside the margin or wrong side $\bm \alpha_n = 1$
+	\item Use Coordinates Descent to find $\bm \alpha$. Update one coordinate ($\argmin$) at the time and others constant.
 \end{itemize}
 
 % ========================================================
@@ -615,14 +544,14 @@ $$
 \section{Kernel Ridge Regression}
 \begin{itemize}
 	\item The following is true for ridge regression
-	\begin{align}
-	    \bm w^* &= (\*X^T \*X + \lambda \*I_D)^{-1} \*X^T \*y \\
-	    &= \*X^T(\*X\*X^T + \lambda \*I_N)^{-1} \*y = \*X^T \bm \alpha^* \nonumber
-	\end{align}
-	\item Complexity of computing $\bm w$: (1) $O(D^2 N + D^3)$, (2) $O(D N^2 + N^3)$
+	\begin{myalign*}
+	    \* w^* &= (\*X^T \*X + \lambda \*I_D)^{-1} \*X^T \*y \text{ , (1)}\\
+	    &= \*X^T(\*X\*X^T + \lambda \*I_N)^{-1} \*y = \*X^T \bm \alpha^* \text{ , (2)}
+	\end{myalign*}
+	\item Complexity of computing $\* w$: (1) $O(D^2 N + D^3)$, (2) $O(D N^2 + N^3)$
 	\item Thus we have
 	\begin{myalign*}
-	    \bm w^* = \*X\bm \alpha^*, \quad \text{with } \bm w^* \in \R^D \text{ and } \bm \alpha^* \in \R^N
+	     \*w^* = \*X^T\bm \alpha^*, \quad \text{with } \* w^* \in \R^D \text{ and } \bm \alpha^* \in \R^N
 	\end{myalign*}
 	\item The representer theorem allows us to write an equivalent optimization problem in terms of $\bm \alpha$.
 	\begin{myalign*}
@@ -668,11 +597,12 @@ $$
 	\end{itemize}
 	\item Thus we get
 	\begin{myalign*}
-	    \*y = \bm w^T \*x = \sum_{i = 1}^K \alpha_i \*x_i^T \*x = \sum_{i = 1}^K \alpha_i k(\*x, \*x_i) 
+	    \*y = \*w^T \*x = \sum_{i = 1}^K \alpha_i \*x_i^T \*x = \sum_{i = 1}^K \alpha_i k(\*x, \*x_i) 
 	\end{myalign*}
 \end{itemize}
 
 % ========================================================
+
 
 \section{K-means}
 \begin{itemize}
@@ -703,10 +633,11 @@ $$
 	\item A good initialization procedure is to choose the prototypes to be equal to a random subset of $K$ data points.
 	\item Probabilistic model
 	\begin{myalign*}
-	    p(\*z, \bm \mu) = \prod_{n = 1}^N \prod_{k = 1}^K 
+	    & p(\*z, \bm \mu) = \prod_{n = 1}^N \prod_{k = 1}^K 
 	    \left[
 	    	\N(\*x_n | \bm \mu_k, \*I)
-	    \right]^{z_{nk}}
+	    \right]^{z_{nk}} \\
+	     & -\log{p(\* x_n | \mu, z)}= \sum^N \sum^K \frac{1}{2} \lVert \*x_n - \mu_k \lVert^2 \*z_{nk} + c'
 	\end{myalign*}
 	\item K-means as a Matrix Factorization
 	\begin{myalign*}
@@ -810,7 +741,19 @@ $$
 	 \end{myalign*}
 	 \item We can add a regularizer and minimize the following cost:
 	 \begin{myalign*}
-	     \L(\*W, \*Z) = \frac{1}{2}\sum_{(d,n)\in\Omega} [x_{dn} - (\*W\*Z^T)_{dn}]^2 \\ + \frac{\lambda_w}{2} \sum_{d = 1}^D \*w_d^T\*w_d + \frac{\lambda_z}{2} \sum_{n = 1}^N \*z_n^T \*z_n
+	     \L(\*W, \*Z) = \frac{1}{2}\sum_{(d,n)\in\Omega} [x_{dn} - (\*W\*Z^T)_{dn}]^2 \\ + \frac{\lambda_w}{2} \lVert \*W \lVert_{\text{Frob}}^2 + \frac{\lambda_z}{2} \lVert \*Z \lVert_{\text{Frob}}^2 
+	 \end{myalign*}
+	 \item {\bf SGD}: For one fixed element $(d,n)$ we derive entry $(d',k)$ of $\*W$ (if $d=d'$ oth. 0):
+	 \begin{myalign*}
+		\frac{\partial}{\partial w_{d',k}} f_{d,n}(\*W, \*Z)  = -[x_{dn}-(\*W\*Z^T)_{dn}]z_{nk}
+	 \end{myalign*}
+	 And of $\*Z$ (if $n=n'$ oth. 0):
+	 \begin{myalign*}
+	 	\frac{\partial}{\partial z_{n',k}} f_{d,n}(\*W, \*Z)  = -[x_{dn}-(\*W\*Z^T)_{dn}]w_{nk}
+	 \end{myalign*}
+	 \begin{myalign*}
+  		\*W^{t+1} &= \*W^t - \gamma \nabla_w f_{d,n}(\*W^t, \*Z^t) \\
+ 	 	\*Z^{t+1} &= \*W^t - \gamma \nabla_z f_{d,n}(\*W^t, \*Z^t)
 	 \end{myalign*}
 	 \item We can use coordinate descent algorithm, by first minimizing w.r.t. $\*Z$ given $\*W$ and then minimizing $\*W$ given $\*Z$. This is called \textbf{Alternating least-squares (ALS)}:
 	 \begin{myalign*}
@@ -818,17 +761,7 @@ $$
 	     \*W^T &\leftarrow (\*Z^T \*Z + \lambda_w \*I_K)^{-1} \*Z^T\*X^T
 	 \end{myalign*}
 	 \item \textit{Complexity}: $O(D N K^2 + N K^3) \rightarrow O(D N K^2)$
-	 \item Probabilistic model
-	 \begin{myalign*}
-	     \prod_{(d,n)\in\Omega}\N(x_{dn} | \*w_d^T \*z_n, I) 
-	     \times \prod_{n = 1}^N \N(\*z_n | 0, \frac{1}{\lambda_z} I) \\
-	     \times \prod_{d = 1}^D \N(\*w_d | 0, \frac{1}{\lambda_w} I)
-	 \end{myalign*}
 
-	 \item Since many ratings are missing we cannot normalize the data. A solution is to add offset terms:
-	 \begin{myalign*}
-	     \frac{1}{2} \sum_{(d,n)\in\Omega} (x_{dn} - \*w_d^T \*z_n - w_{0d} - z_{0n} - \mu)^2
-	 \end{myalign*}
 \end{itemize}
 % ========================================================
 
@@ -849,13 +782,16 @@ $$
 	    \*X = \sum_{d = 1}^D s_d \*u_d \*v_d^T
 	\end{myalign*}
 	This tells you about the spectrum of $\*X$ where higher singular vectors contain the \textit{low-frequency information} and lower singular values contain the \textit{high-frequency information}. 
-	\item Dimensionality Reduction \\
-	Take the matrix $\*S^{(K)}$ with the $K$ first diagonal elements non zero. Then, rank-$K$ approx:
-	$$ \*X \approx \*X_K = \*U\*S^{(K)}\*V^T$$
+	\item {\bf Truncated SVD}: \\
+	Take the matrix $\*S^{(K)}$ with the $K$ first diagonal elements non zero. Then, rank-$K$ approx:	
+	\begin{myalign*}
+		\*X \approx \*X_K = \*U\*S^{(K)}\*V^T
+	\end{myalign*}
+	
 \end{itemize}
 % ========================================================
 
-\subsection{Principal Componement Analysis}
+\section{Principal Componement Analysis}
 \begin{itemize}
 	\item PCA is a dimensionality reduction method and a method to decorrelate the data
 $\*X \approx \tilde{\*X} = \*W \*Z^T$
@@ -870,6 +806,7 @@ such that columns of $\*W$ are orthogonal.
 \begin{myalign*}
     \*W &= \*U \*S_D^{1 / 2}, \*Z^T = \*S^{1 / 2}\*V^T 
 \end{myalign*}
+\item Not invariant under scalings of the feature = arbitrariness, $\rightarrow$ normalize $\*X$
 \end{itemize}
 
 
@@ -881,8 +818,6 @@ such that columns of $\*W$ are orthogonal.
 	\item NN can represent the Rienmann sum with only two layers $\Rightarrow$ It's powerful!
 	\item Cost function: \\$\L = \frac{1}{N} \sum_{n=1}^N\left( y_n - f^{(L+1)} \circ ... \circ f^{(1)}(\bm x_n^{(0)})\right)^2$ \\
 	We can use SGD to minimize the cost function.
-	\item Compact form: $\bm W_{i,j}^{(l)} = w_{i,j}^{(l)}$ \\
-	$\bm x^{(l)} = f^{(l)}(\bm x^{(l-1)}) = \phi\left( \left(\bm W^{(l)}\right)^T\bm x^{(l-1)} + \bm b^{(l)}\right)$
 \end{itemize}
 
 % ========================================================
@@ -929,6 +864,10 @@ Sparse connections and \textit{weights sharing}: reduce complexity. (e.g. pixels
 
 \begin{itemize}
 	\item Regularization term: $\frac{1}{2} \sum_{l=1}^{L+1} \mu^{(l)} || W ^{(l)} ||  ^{2} _{F}$
+	\item Weight decay is $\Theta[t](1-\eta \mu)$ in:
+	\begin{myalign*}
+	\Theta[t+1] = \Theta[t] + \eta (\nabla \L + \mu \Theta[t])
+	\end{myalign*}
 	\item Data Augm.: e.g. shift or rotation of pics
 	\item Dropout: avoid overfit. Drop nodes randomly. (Then average multiple drop-NN)
 \end{itemize}
