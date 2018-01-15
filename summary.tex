@@ -26,9 +26,11 @@
 	\item $a_0 \*x_0 + \hdots + a_n \*x_n = \*X^T \*a$, $\*x_n$ are col of $\*X^T$
     \item \textbf{positive definite} (pd) if $\*a^T \*V \*a > 0$
 	\item $(\*x-\*b)^T (\*x-\*b) = \lVert \*x - \*b \lVert^2_2 $
+	\item $\lVert \*A \lVert_F = \sqrt{\sum \sigma_i^2}$ , and $\lVert \*A \lVert_1 = tr({\sqrt{\*A^T \*A}}$)
 \end{itemize}
 
 \subsection{Distributions}
+Valid distribution $p(x) > 0 \text{, }\forall x$ and $\sum p(x) = 1$
 
 \begin{itemize}
     \item \textbf{Gaussian}: $ \N(x | \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp(- \frac{(x - \mu)^2}{2 \sigma^2})$
@@ -305,8 +307,14 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
     \item $L_1$-Reg. (Lasso): $\Omega(\*w) = \lambda \lVert \*w \lVert_1$
     \item $\rightarrow$ large values of $\*w_i$, sparse
     \item Maximum-a-posteriori (MAP)
+    \item (i) Posterior prob. $\propto$ Likelihood $\times$ Prior prob
     \begin{myalign*}
-        \*w = \argmin_{\* w} \sum^N \frac{1}{2\sigma^2}(\*y_n - \*x^T \*w)^2 + \frac{\lambda}{2} \lVert\*w \lVert^2
+        p(\*y | \*X \*w) &= \prod^N \N(\*y_n | \*x_n^T \*w, \sigma^2) \\
+        p(\*w) &= \N(\*w | 0, \*I_D) \\
+        \text{then} \rightarrow \*w^{\star} &= \argmax_{\*w} p(\*y | \*X \*w) \cdot p(\*w)
+    \end{myalign*}   
+    \begin{myalign*}
+        \*w^{\star} = \argmin_{\*w} \sum^N \frac{1}{2\sigma^2}(\*y_n - \*x^T \*w)^2 + \frac{\lambda}{2} \lVert\*w \lVert^2
     \end{myalign*}   
 \end{itemize}
 
@@ -327,6 +335,8 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	\item Model more complex increases test error
 	\item Small $\lambda \rightarrow$ low bias but large variance
 	\item Large $\lambda \rightarrow$ large bias but low variance
+	\item {\bf Simple} $\rightarrow$ large bias but low variance
+	\item {\bf Complex} $\rightarrow$ low bias but large variance
 	\begin{myalign*}
 	    err = \sigma^2 + \E[f_{lse} - \E[f_{lse}]]^2 + [f_{true} - \E[f_{lse}]]^2
 	\end{myalign*}
@@ -425,7 +435,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
       \begin{myalign*}
 	  \rightarrow \exp( \log(\frac{\mu}{1 - \mu})y + \log(1 - \mu)))
       \end{myalign*}
-      (i) there is a relationship between $\eta$ and $\mu$ throught the \textbf{link function}
+      (i) there is a relationship between $\eta$ and $\mu$ through the \textbf{link function}
       \begin{myalign*}
 	  \eta = \log(\frac{\mu}{1 - \mu}) \leftrightarrow \mu = \frac{e^{\eta}}{1 + e^{\eta}}
       \end{myalign*}
@@ -877,7 +887,7 @@ Sparse connections and \textit{weights sharing}: reduce complexity. (e.g. pixels
 \section{Bayes Net}
 \begin{itemize}
 	\item Graph example: $p(x, y, z) = p(y | x) p(z | x) p(x)$ : $(y \leftarrow x \rightarrow z)$ 
-	\item \textbf{D-Separation} X and Y are D-separated by Z if every path from $ x \in X$ to $y \in Y$ is blocked by Z.
+	\item \textbf{D-Separation} X and Y are D-separated by Z if every path from $ x \in X$ to $y \in Y$ is blocked by Z. ($\rightarrow$ independent)
 	\item \textbf{Blocked Path} contains a variable that
 	\begin{itemize}
 		\item is in Z and is \textbf{head-to-tail} or \textbf{tail-to-tail}
