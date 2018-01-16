@@ -12,7 +12,6 @@
 	\item $\partial \lVert \mathbf{x} \lVert^2_2 = 2\mathbf{x}$ and $\partial \lVert \mathbf{X} \lVert^2_2 = 2\mathbf{X}$
 	\item $\partial \lVert \mathbf{x}-\mathbf{a} \lVert_2 = \frac{\mathbf{x}-\mathbf{a}}{\lVert \mathbf{x}-\mathbf{a} \lVert_2}$
 	\item $\partial (\*b-\*A\*x)^T(\*b-\*A\*x) = -2\*A^T(\*b-\*A\*x)$
-	\item $\partial \lVert \mathbf{X} \lVert_2 =\lVert \mathbf{X}^T \lVert_2$
 	\item \textbf{Chain rule}:
 		\begin{myalign*}
 			\frac{\partial g(\mathbf{U}))}{\partial \mathbf{X}_{ij}} = \frac{\partial g(f(\mathbf{X})))}{\partial \mathbf{X}_{ij}} = tr[(\frac{\partial g(\mathbf{U})}{\partial \mathbf{U} })^T\frac{\partial f(\mathbf{X})}{\partial \mathbf{X}_{ij}}]
@@ -27,13 +26,14 @@
     \item \textbf{positive definite} (pd) if $\*a^T \*V \*a > 0$
 	\item $(\*x-\*b)^T (\*x-\*b) = \lVert \*x - \*b \lVert^2_2 $
 	\item $\lVert \*A \lVert_F = \sqrt{\sum \sigma_i^2}$ , and $\lVert \*A \lVert_1 = tr({\sqrt{\*A^T \*A}}$)
+	\item $\lVert \mathbf{X} \lVert_2 =\lVert \mathbf{X}^T \lVert_2$
 \end{itemize}
 
 \subsection{Distributions}
 Valid distribution $p(x) > 0 \text{, }\forall x$ and $\sum p(x) = 1$
-
+Model is identifiable iff $\theta_1 = \theta_2 \rightarrow P_{\theta_1} = P_{\theta_2}$
 \begin{itemize}
-    \item \textbf{Gaussian}: $ \N(x | \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp(- \frac{(x - \mu)^2}{2 \sigma^2})$
+    \item \textbf{Gaussian} (Not convex): $ \N(x | \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp(- \frac{(x - \mu)^2}{2 \sigma^2})$
      $ \N(x | \mu, \Sigma^2) = \frac{\exp(-\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu))}{\sqrt{ (2 \pi)^D det(\Sigma)}} $
     \item \textbf{Poisson}: $\text{P(k events in interval)} = e^{-\lambda} \frac{\lambda^k}{k!}$
     \item \textbf{Bernoulli}:  $p(y | \mu) = \mu^y (1- \mu)^{1 - y}$
@@ -65,6 +65,11 @@ A function $f(x)$ is convex if
     \item Covariance matrix of a data vector $\*x$
    		\begin{myalign*}
    		    \*\Sigma = \frac{1}{N} \sum_{n = 1}^N (\*x_n - \E(\*x))(\*x_n - \E(\*x))^T
+   		\end{myalign*}
+    \item Multi-class $\*x$
+   		\begin{myalign*}
+   		    p(\* y | \*X, \beta) &= \prod^N p(\* y_n | \*x_n, \beta) \\
+   		     &= \prod^K \prod^N [p(\* y_n = k| \*x_n, \beta)]^{\tilde{y}_{nk}}
    		\end{myalign*}
 	
 \end{itemize}
@@ -306,15 +311,15 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
     \item $\rightarrow$ No ill cond., $(\*X^T\*X + \lambda ' \*I)^{-1}$ exists
     \item $L_1$-Reg. (Lasso): $\Omega(\*w) = \lambda \lVert \*w \lVert_1$
     \item $\rightarrow$ large values of $\*w_i$, sparse
-    \item Maximum-a-posteriori (MAP)
+    \item {\bf Maximum-a-posteriori (MAP)}
     \item (i) Posterior prob. $\propto$ Likelihood $\times$ Prior prob
     \begin{myalign*}
-        p(\*y | \*X \*w) &= \prod^N \N(\*y_n | \*x_n^T \*w, \sigma^2) \\
-        p(\*w) &= \N(\*w | 0, \*I_D) \\
+        p(\*y | \*X \*w) &= \prod^N \N(\*y_n | \*x_n^T \*w, \sigma_n^2) \\
+        p(\*w) &= \N(\*w | 0, \sigma_0^2 \*I_D) \\
         \text{then} \rightarrow \*w^{\star} &= \argmax_{\*w} p(\*y | \*X \*w) \cdot p(\*w)
     \end{myalign*}   
     \begin{myalign*}
-        \*w^{\star} = \argmin_{\*w} \sum^N \frac{1}{2\sigma^2}(\*y_n - \*x^T \*w)^2 + \frac{\lambda}{2} \lVert\*w \lVert^2
+        \*w^{\star} = \argmin_{\*w} \sum^N \frac{1}{2\sigma_n^2}(\*y_n - \*x^T \*w)^2 + \frac{1}{2\sigma_0^2} \lVert\*w \lVert^2
     \end{myalign*}   
 \end{itemize}
 
@@ -678,7 +683,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	    p(\*X, \*z | \bm \mu, \bm \Sigma, \bm \pi)
 	    = \prod_{n = 1}^N
 	    	p(\*x_n | \*r_n, \bm \mu, \bm \Sigma) p(\*z_n | \bm \pi) \\
-	    = \prod_{n=1}^N \prod_{k = 1}^K [(\N(\*x_n |\bm \mu_k, \bm \Sigma_k))^{z_{nk}}] \prod_{k = 1}^K [\pi]^{z_{nk}}
+	    = \prod_{n=1}^N \prod_{k = 1}^K [(\N(\*x_n |\bm \mu_k, \bm \Sigma_k))^{z_{nk}}] \prod_{k = 1}^K [\pi_k]^{z_{nk}}
 	\end{myalign*}
 	\item $z_n$ are called \textit{latent} unobserved variables
 	\item Unknown parameters are given by $ \bm \theta = \{\bm \mu, \bm \Sigma, \bm \pi\}$
