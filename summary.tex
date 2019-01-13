@@ -319,7 +319,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
         \text{then} \rightarrow \*w^{\star} &= \argmax_{\*w} p(\*y | \*X \*w) \cdot p(\*w)
     \end{myalign*}   
     \begin{myalign*}
-        \*w^{\star} = \argmin_{\*w} \sum^N \frac{1}{2\sigma_n^2}(\*y_n - \*x^T \*w)^2 + \frac{1}{2\sigma_0^2} \lVert\*w \lVert^2
+        \hspace{-.2cm} \*w^{\star} = \argmin_{\*w} \sum^N \frac{1}{2\sigma_n^2}(\*y_n - \*x^T \*w)^2 + \frac{1}{2\sigma_0^2} \lVert\*w \lVert^2
     \end{myalign*}   
 \end{itemize}
 
@@ -343,7 +343,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	\item {\bf Simple} $\rightarrow$ large bias but low variance
 	\item {\bf Complex} $\rightarrow$ low bias but large variance
 	\begin{myalign*}
-	    err = \sigma^2 + \E[f_{lse} - \E[f_{lse}]]^2 + [f_{true} - \E[f_{lse}]]^2
+	    \hspace{-.3cm} err = \sigma^2 + \E[f_{lse} - \E[f_{lse}]]^2 + [f_{true} - \E[f_{lse}]]^2
 	\end{myalign*}
 \end{itemize}
 % ========================================================
@@ -377,7 +377,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	\end{myalign*}
 	\item The log-likelihood (w.r.t. MLE):
 	\begin{myalign*}
-	    \L(\* w) &= - \sum_{n = 1}^N \*y_n \ln \sigma(\*x_n^T \*w)  + (1-\*y_n)\ln(1- \sigma(\*x_n^T \*w))\\
+	    \hspace{-1.3cm} \L(\* w) &= - \sum_{n = 1}^N \*y_n \ln \sigma(\*x_n^T \*w)  + (1-\*y_n)\ln(1- \sigma(\*x_n^T \*w))\\
 	    &=  \sum_{n = 1}^N  \ln[1 + \exp(\*x_n^T \* w) ]-  \*y_n \*x_n^T\*w
 	\end{myalign*}
 	\item We can use the fact that
@@ -651,8 +651,8 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	    & p(\*z, \bm \mu) = \prod_{n = 1}^N \prod_{k = 1}^K 
 	    \left[
 	    	\N(\*x_n | \bm \mu_k, \*I)
-	    \right]^{z_{nk}} \\
-	     & -\log{p(\* x_n | \mu, z)}= \sum^N \sum^K \frac{1}{2} \lVert \*x_n - \mu_k \lVert^2 \*z_{nk} + c'
+	    \right]^{z_{nk}} \\ 
+	     & \hspace{-.5cm} -\log{p(\* x_n | \mu, z)}= \sum^N \sum^K \frac{1}{2} \lVert \*x_n - \mu_k \lVert^2 \*z_{nk} + c'
 	\end{myalign*}
 	\item K-means as a Matrix Factorization
 	\begin{myalign*}
@@ -729,6 +729,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 		\end{myalign*}
 
 		\begin{myalign*}
+			\hspace{-.88cm}
 		    \bm\Sigma_k^{(t + 1)} = \frac{\sum_{n = 1}^N q_{kn}^{(t)} (\*x_n - \bm \mu_k^{(t + 1)})(\*x_n - \bm \mu_k^{(t + 1)})^T}{\sum_{n = 1}^N q_{kn}^{(t)})}
 		\end{myalign*}
 
@@ -806,7 +807,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 \end{itemize}
 % ========================================================
 
-\section{Principal Componement Analysis}
+\section{Principal Component Analysis}
 \begin{itemize}
 	\item PCA is a dimensionality reduction method and a method to decorrelate the data
 $\*X \approx \tilde{\*X} = \*W \*Z^T$
