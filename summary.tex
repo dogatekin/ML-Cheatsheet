@@ -6,17 +6,17 @@
 \subsection{Derivatives }
 
 \begin{itemize}
-	\item $\partial \mathbf{x}^T \mathbf{a} = \partial \mathbf{a}^T \mathbf{x} = \mathbf{a}$
-	\item $\partial \*x^T\*A\*x = (\*A + \*A^T)\*x$
-	\item $\partial \mathbf{a}^T \mathbf{X} \mathbf{b} = \partial \mathbf{a}^T \mathbf{X}^T \mathbf{b} = \mathbf{a} \mathbf{b}^T$
-	\item $\partial \lVert \mathbf{x} \lVert^2_2 = 2\mathbf{x}$ and $\partial \lVert \mathbf{X} \lVert^2_2 = 2\mathbf{X}$
-	\item $\partial \lVert \mathbf{x}-\mathbf{a} \lVert_2 = \frac{\mathbf{x}-\mathbf{a}}{\lVert \mathbf{x}-\mathbf{a} \lVert_2}$
-	\item $\partial (\*b-\*A\*x)^T(\*b-\*A\*x) = -2\*A^T(\*b-\*A\*x)$
-	\item \textbf{Chain rule}:
-		\begin{myalign*}
-			\frac{\partial g(\mathbf{U}))}{\partial \mathbf{X}_{ij}} = \frac{\partial g(f(\mathbf{X})))}{\partial \mathbf{X}_{ij}} = tr[(\frac{\partial g(\mathbf{U})}{\partial \mathbf{U} })^T\frac{\partial f(\mathbf{X})}{\partial \mathbf{X}_{ij}}]
-		\end{myalign*}
-
+    \item $\partial ( \mathbf { X } \mathbf { Y } ) = ( \partial \mathbf { X } ) \mathbf { Y } + \mathbf { X } ( \partial \mathbf { Y } )$
+    \item $\frac { \partial \mathbf { f } ( \mathbf { g } ( \mathbf { u } ( \mathbf { x } ) ) ) } { \partial \mathbf { x } } = \frac { \partial \mathbf { u } ( \mathbf { x } ) } { \partial \mathbf { x } } \frac { \partial \mathbf { g } ( \mathbf { u } ) } { \partial \mathbf { u } } \frac { \partial \mathbf { f } ( \mathbf { g } ) } { \partial \mathbf { g } }$
+	\item $\frac { \partial \mathbf { x } ^ { T } \mathbf { a } } { \partial \mathbf { x } } = \frac { \partial \mathbf { a } ^ { T } \mathbf { x } } { \partial \mathbf { x } } = \mathbf { a }$
+	\item $\frac { \partial \mathbf { a } ^ { T } \mathbf { X } \mathbf { b } } { \partial \mathbf { X } } = \mathbf { a b } ^ { T }$
+	\item $\frac { \partial \mathbf { a } ^ { T } \mathbf { X } ^ { T } \mathbf { b } } { \partial \mathbf { X } } = \mathbf { b a } ^ { T }$
+	\item $\frac { \partial \mathbf { X } } { \partial X _ { i j } } = \mathbf { J } ^ { i j }$, $J^{ij}$ is the single entry matrix
+	\item $\frac { \partial \mathbf { b } ^ { T } \mathbf { X } ^ { T } \mathbf { X } \mathbf { c } } { \partial \mathbf { X } } = \mathbf { X } \left( \mathbf { b } \mathbf { c } ^ { T } + \mathbf { c b } ^ { T } \right)$
+	\item $\frac { \partial \mathbf { x } ^ { T } \mathbf { B } \mathbf { x } } { \partial \mathbf { x } } = \left( \mathbf { B } + \mathbf { B } ^ { T } \right) \mathbf { x }$
+	\item $\frac { \partial } { \partial \mathbf { x } } ( \mathbf { x } - \mathbf { A } \mathbf { s } ) ^ { T } \mathbf { W } ( \mathbf { x } - \mathbf { A } \mathbf { s } ) = 2 \mathbf { W } ( \mathbf { x } - \mathbf { A } \mathbf { s } )$
+	\item $\frac { \partial } { \partial \mathbf { x } } \| \mathbf { x } - \mathbf { a } \| _ { 2 } = \frac { \mathbf { x } - \mathbf { a } } { \| \mathbf { x } - \mathbf { a } \| _ { 2 } }$
+	\item $\frac { \partial } { \partial \mathbf { X } } \| \mathbf { X } \| _ { \mathrm { F } } ^ { 2 } = \frac { \partial } { \partial \mathbf { X } } \operatorname { Tr } \left( \mathbf { X } \mathbf { X } ^ { H } \right) = 2 \mathbf { X }$
 \end{itemize}
 
 \subsection{Linear Algebra}
@@ -332,9 +332,11 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	 	\item \textbf{Squared bias}: The average \textit{shift} of the predictions 
 	 	\item \textbf{Variance}: measure how data points vary around their average.
 	 \end{itemize} 
-	 \begin{center}
+% 	 \begin{center}
+
 	 	expected loss $= (\text{bias})^2$ + variance + noise
-	 \end{center}
+	 	
+% 	 \end{center}
 	\item Model bias and estimation bias are important
 	\item RR increases estimation bias and reduces var
 	\item Model more complex increases test error
@@ -746,7 +748,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 \begin{itemize}
 	\item We have $D$ movies and $N$ users
 	\item $\*X$ is a matrix $D \times N$ with $x_{dn}$ the rating of n'th user for d'th movie.
-	\item We project data vectors $\*x_n$ to a smaller dimension $\*z_n \in \Bbb R^M$
+	\item We project data vectors $\*x_n$ to a smaller dimension $\*z_n \in \mathbb R^M$
 	\item We have now 2 latent variables:
 	\begin{itemize}
 		\item $\*Z$ a $N \times K$ matrix that gives features for the users
