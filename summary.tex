@@ -1,3 +1,10 @@
+% TODO:
+% - Add a part about KNN
+% - Add a part about text processing (GloVe, word2Vec, FastText)
+% 
+%
+
+
 % ========================================================
 % ========================================================
 
@@ -11,22 +18,20 @@
 	\item $\frac { \partial \mathbf { x } ^ { T } \mathbf { a } } { \partial \mathbf { x } } = \frac { \partial \mathbf { a } ^ { T } \mathbf { x } } { \partial \mathbf { x } } = \mathbf { a }$
 	\item $\frac { \partial \mathbf { a } ^ { T } \mathbf { X } \mathbf { b } } { \partial \mathbf { X } } = \mathbf { a b } ^ { T }$
 	\item $\frac { \partial \mathbf { a } ^ { T } \mathbf { X } ^ { T } \mathbf { b } } { \partial \mathbf { X } } = \mathbf { b a } ^ { T }$
-	\item $\frac { \partial \mathbf { X } } { \partial X _ { i j } } = \mathbf { J } ^ { i j }$, $J^{ij}$ is the single entry matrix
+	\item $\frac { \partial \mathbf { X } } { \partial X _ { i j } } = \mathbf { J } ^ { i j }$ (the single entry matrix)
 	\item $\frac { \partial \mathbf { b } ^ { T } \mathbf { X } ^ { T } \mathbf { X } \mathbf { c } } { \partial \mathbf { X } } = \mathbf { X } \left( \mathbf { b } \mathbf { c } ^ { T } + \mathbf { c b } ^ { T } \right)$
 	\item $\frac { \partial \mathbf { x } ^ { T } \mathbf { B } \mathbf { x } } { \partial \mathbf { x } } = \left( \mathbf { B } + \mathbf { B } ^ { T } \right) \mathbf { x }$
 	\item $\frac { \partial } { \partial \mathbf { x } } ( \mathbf { x } - \mathbf { A } \mathbf { s } ) ^ { T } \mathbf { W } ( \mathbf { x } - \mathbf { A } \mathbf { s } ) = 2 \mathbf { W } ( \mathbf { x } - \mathbf { A } \mathbf { s } )$
-	\item $\frac { \partial } { \partial \mathbf { x } } \| \mathbf { x } - \mathbf { a } \| _ { 2 } = \frac { \mathbf { x } - \mathbf { a } } { \| \mathbf { x } - \mathbf { a } \| _ { 2 } }$
-	\item $\frac { \partial } { \partial \mathbf { X } } \| \mathbf { X } \| _ { \mathrm { F } } ^ { 2 } = \frac { \partial } { \partial \mathbf { X } } \operatorname { Tr } \left( \mathbf { X } \mathbf { X } ^ { H } \right) = 2 \mathbf { X }$
+	\item $\frac { \partial } { \partial \mathbf { X } } \| \mathbf { X } \| _ { \mathrm { F } } ^ { 2 } = \frac { \partial } { \partial \mathbf { X } } \operatorname { Tr } \left( \mathbf { X } \mathbf { X } ^ { T } \right) = 2 \mathbf { X }$
+	\item $\frac { \partial } { \partial \mathbf { X } } \operatorname { Tr } \left( \mathbf { X } ^ { T } \mathbf { B X } \right) = \mathbf { B X } + \mathbf { B } ^ { T } \mathbf { X }$
 \end{itemize}
 
 \subsection{Linear Algebra}
 
 \begin{itemize}
-	\item $a_0 \*x_0 + \hdots + a_n \*x_n = \*X^T \*a$, $\*x_n$ are col of $\*X^T$
-    \item \textbf{positive definite} (pd) if $\*a^T \*V \*a > 0$
 	\item $(\*x-\*b)^T (\*x-\*b) = \lVert \*x - \*b \lVert^2_2 $
 	\item $\lVert \*A \lVert_F = \sqrt{\sum \sigma_i^2}$ , and $\lVert \*A \lVert_1 = tr({\sqrt{\*A^T \*A}}$)
-	\item $\lVert \mathbf{X} \lVert_2 =\lVert \mathbf{X}^T \lVert_2$
+	\item $\lVert \mathbf{X} \lVert_F =\lVert \mathbf{X}^T \lVert_F$
 \end{itemize}
 
 \subsection{Distributions}
@@ -36,7 +41,13 @@ Model is identifiable iff $\theta_1 = \theta_2 \rightarrow P_{\theta_1} = P_{\th
     \item \textbf{Gaussian} (Not convex): $ \N(x | \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp(- \frac{(x - \mu)^2}{2 \sigma^2})$
      $ \N(x | \mu, \Sigma^2) = \frac{\exp(-\frac{1}{2} (x - \mu)^T \Sigma^{-1} (x - \mu))}{\sqrt{ (2 \pi)^D det(\Sigma)}} $
     \item \textbf{Poisson}: $\text{P(k events in interval)} = e^{-\lambda} \frac{\lambda^k}{k!}$
+    \begin{itemize}
+        \item Mean = Variance = $\lambda$
+    \end{itemize}
     \item \textbf{Bernoulli}:  $p(y | \mu) = \mu^y (1- \mu)^{1 - y}$
+    \begin{itemize}
+        \item Mean = $p$ Variance = $p(1-p)$
+    \end{itemize}
 \end{itemize}
 
 \subsection{Convexity}
@@ -50,6 +61,8 @@ A function $f(x)$ is convex if
             f(\lambda \*x_1 + (1 - \lambda) \*x_2) \leq \lambda f(\*x_1) + (1 - \lambda) f(\*x_2)
         \end{myalign*}
    \item it is a sum of convex functions
+   \item composition of convex and linear functions
+   \item $f(x) = g(h(x))$, g,h are convex, g increasing
    \item the Hessian $\*H$ is positive semi-definite
 	
 \end{itemize}
@@ -88,8 +101,8 @@ A function $f(x)$ is convex if
 \end{myalign*}
 
 \begin{itemize}
-    \item MSE is \textbf{convex} thus it has only one global minumum value.
-    \item MSE is not good when outliers are present.
+    \item MSE is \textbf{strictly convex} thus it has only one global minumum value.
+    \item MSE is very prone to outliers.
 \end{itemize}
 
 \textbf{Mean Absolute Error (MAE)}:
@@ -97,31 +110,9 @@ A function $f(x)$ is convex if
     MAE = \frac{1}{N} \sum^N_{n = 1} |y_n - f(\* x_n)|
 \end{myalign*}
 
-\textbf{Huber loss}
-\begin{myalign*}
-    Huber = 
-    \left\{ 
-        \begin{array}{c c}
-            \frac{1}{2} z^2 &,|z| \leq \delta \\
-            \delta |z| - \frac{1}{2} \delta^2 & ,|z| > \delta
-        \end{array}
-    \right.
-\end{myalign*}
 \begin{itemize}
-\item Huber loss is convex, differentiable, and also robust to outliers but hard to set $\delta$.\\
+    \item MAE is more robust to outliers than MSE.
 \end{itemize}
-
-\textbf{Tukey's bisquare loss}
-\begin{myalign*}
-    L(z) =
-    \left\{ 
-        \begin{array}{c c}
-            z(\delta^2 - z^2)^2 &, |z| < \delta \\
-            0 &, |z| \geq \delta
-        \end{array}
-    \right.
-\end{myalign*}
-Non-convex, non-diff., but robust to outliers.
 
 \textbf{Hinge loss}: $[1 - y_n f(\* x_n)]_+ = \max(0, 1 - y_n f(\* x_n))$ \\
 \textbf{Logistic loss}: $ \log(1 - \exp(y_n f(\* x_n)))$
@@ -129,7 +120,7 @@ Non-convex, non-diff., but robust to outliers.
 
 % ========================================================
 
-\section{Regression}
+\section{Linear Regression}
 \begin{itemize}
 	\item Model that assume linear relationship
 	\begin{myalign*}
@@ -147,7 +138,7 @@ Non-convex, non-diff., but robust to outliers.
 \section{Optimization}
 \subsection{Grid search}
 \begin{itemize}
-    \item Compute the cost over a grid of $M$ points to find the minimum. Exponential Complexity. Hard to find a good range of values
+    \item Compute the cost over a grid of $V$ points. Exponential Complexity $\mathcal{O}(|V|^D), D$ is the dimension. Hard to find a good range of values. No guarantee to converge.
 \end{itemize}
 
 % ========================================================
@@ -165,6 +156,7 @@ Non-convex, non-diff., but robust to outliers.
    	\end{myalign*}
 
     \item With $\gamma$ too big, method might diverge. With $\gamma$ too small, convergence is slow.
+    \item Very sensitive to ill-conditioning $\Rightarrow$ always normalize features $\Rightarrow$ allow different directions to converge at same speed.
 \end{itemize}
 
 
@@ -176,7 +168,7 @@ In ML, most cost functions are formulated as a sum over the training examples:
 $$ \L(\*w) = \frac{1}{N}\sum_{n=1}^N\L_n(\*w)$$
 $\Rightarrow$ SGD update rule (only n-th training exam.):
 $$ \*w^{(t + 1)} \leftarrow \*w^{(t)} - \gamma \bm \nabla \L_n(\*w^{(t)})$$
-\emph{Idea}: Cheap but unbiased estimate of grad. $$\E[\bm\nabla\L_n(\*w)] = \bm \nabla(\*w)$$
+\emph{Idea}: Cheap but unbiased estimate of grad. $$\E[\bm\nabla\L_n(\*w)] = \bm \nabla\L(\*w)$$
 
 % ========================================================
 
@@ -206,10 +198,8 @@ Update rule : $ \* w^{(t + 1)} \leftarrow \* w^{(t)} - \gamma \* g^{(t)}$
     \item Optimality conditions:
     \begin{enumerate}
         \item \textit{necessary}: gradient equal zero: $\frac{d \L(\*w^*)}{d \*w} = 0$
-        \item \textit{sufficient}: Hessian matrix is positive definite: $\* H(\*w^*) = \frac{d^2 \L(\*w^*)}{d \*w d \*w^T}$
+        \item \textit{sufficient}: Hessian matrix is positive definite: $\* H(\*w^*) = \frac{d^2 \L(\*w^*)}{d \*w d \*w^T} = \frac{1}{N} X^TX$
     \end{enumerate}
-
-    \item Very sensitive to illconditioning $\Rightarrow$ always normalize features.
     \item \textit{Complexity}: $O(NDI)$ with $I$ the number of iterations
 \end{itemize}
 
@@ -243,6 +233,12 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
     
 \end{itemize}
 
+\subsection{Complexities for MSE/MAE per iteration}
+\begin{itemize}
+    \item GD=$\mathcal{O}(ND)$
+    \item MB-GD=$\mathcal{O}(BD)$
+    \item SGD=$\mathcal{O}(D)$
+\end{itemize}
 % ========================================================
 
 \section{Least Squares}
@@ -266,6 +262,10 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
     \item \textit{Complexity}: $O(ND^2 + D^3) \equiv O(ND^2)$
 
     \item $\*X$ can be rank deficient when $D > N$ or when the comlumns $\*{\bar{x}}_d$ are nearly collinear. $\Rightarrow$  matrix is ill-conditioned.
+    \item Can still solve using a linear system solver using normal equations:
+    \begin{myalign*}
+    	\*X^\top \*X\*w = \*X^\top \*y
+    \end{myalign*}
 \end{itemize}
 
 % ========================================================
@@ -299,18 +299,20 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 
 % ========================================================
 
-\section{Ridge Regression (RR)}
+\section{Regularized Regression (RR)}
 \begin{itemize}
     \item Linear models usually overfit. We can penalize them with a \textbf{regularization term}
     \begin{myalign*}
         \min_{\bm w} \L(\* w) + \Omega(\*w) 
     \end{myalign*}    
     \item $L_2$-Reg. (Ridge): $\Omega(\*w) = \lambda \lVert \*w \lVert_2^2$
+    \item This corresponds to MAP estimate with Gaussian (zero-mean) prior on weights.
     \item $\rightarrow$ small values of $\*w_i$, not sparse
     \item $\rightarrow$ $\*w^{\star} = (\*X^T\*X + \lambda ' \*I)^{-1}\*X^T\*y$ with $\lambda ' = 2N\lambda$
     \item $\rightarrow$ No ill cond., $(\*X^T\*X + \lambda ' \*I)^{-1}$ exists
     \item $L_1$-Reg. (Lasso): $\Omega(\*w) = \lambda \lVert \*w \lVert_1$
-    \item $\rightarrow$ large values of $\*w_i$, sparse
+    \item This corresponds to MAP estimate with Laplacian (zero-mean) prior on weights.
+    \item $\rightarrow$ $\*w_i$ sparse, implicit model selection
     \item {\bf Maximum-a-posteriori (MAP)}
     \item (i) Posterior prob. $\propto$ Likelihood $\times$ Prior prob
     \begin{myalign*}
@@ -337,13 +339,9 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	 	expected loss $= (\text{bias})^2$ + variance + noise
 	 	
 % 	 \end{center}
-	\item Model bias and estimation bias are important
-	\item RR increases estimation bias and reduces var
-	\item Model more complex increases test error
-	\item Small $\lambda \rightarrow$ low bias but large variance
-	\item Large $\lambda \rightarrow$ large bias but low variance
-	\item {\bf Simple} $\rightarrow$ large bias but low variance
-	\item {\bf Complex} $\rightarrow$ low bias but large variance
+	\item Regularization increases estimation bias and reduces var
+	\item {\bf Simple} (e.g. large  $\lambda$) $\rightarrow$ large bias but low variance
+	\item {\bf Complex} (e.g. small  $\lambda$) $\rightarrow$ low bias but large variance
 	\begin{myalign*}
 	    \hspace{-.3cm} err = \sigma^2 + \E[f_{lse} - \E[f_{lse}]]^2 + [f_{true} - \E[f_{lse}]]^2
 	\end{myalign*}
@@ -408,7 +406,6 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 		\begin{myalign*}
 		    S_{nn} = \sigma(\* x_n^T\* w)(1 - \sigma(\* x_n^T \* w))
 		\end{myalign*}
-		\item The negative of the log-likelihood is not strictly convex.
 	\end{itemize}
 	\item \textbf{Newton's Method} %LEARN
 	\begin{itemize}
@@ -438,19 +435,20 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 		\begin{myalign*}
 		    p(\*y | \bm \eta) = h(y) \exp(\bm \eta^T \bm \phi(\*y) - A(\bm \eta))
 		\end{myalign*}
+	  \item For proper normalisation ($\int p = 1$):
+	  	\begin{myalign*}
+		    A(\bm \eta) = \ln[\int_y h(y) \exp(\bm \eta^T \bm \phi(\*y))]
+		\end{myalign*}
       \item {\bf Bernoulli} distribution example
       \begin{myalign*}
 	  \rightarrow \exp( \log(\frac{\mu}{1 - \mu})y + \log(1 - \mu)))
       \end{myalign*}
-      (i) there is a relationship between $\eta$ and $\mu$ through the \textbf{link function}
+      (i) \textbf{link function g} relates $\eta$ and $\mu$
       \begin{myalign*}
+      \bm \eta = \*g(\bm \mu) \Leftrightarrow \bm \mu = \*g^{-1}(\bm \eta) \\
 	  \eta = \log(\frac{\mu}{1 - \mu}) \leftrightarrow \mu = \frac{e^{\eta}}{1 + e^{\eta}}
       \end{myalign*}
       (ii) Note that $\mu$ is the mean parameter of $y$
-      (iii) Relationship between the mean $\bm \mu$ and $\bm \eta$ is defined using a link function $g$
-        \begin{myalign*}
-            \bm \eta = \*g(\bm \mu) \Leftrightarrow \bm \mu = \*g^{-1}(\bm \eta)
-        \end{myalign*}
       \item {\bf Gaussian} distribution example
       \begin{myalign*}
 	  \exp( (\frac{\mu}{\sigma^2}, \frac{-1}{2\sigma^2})(y, y^2)^T - \frac{\mu^2}{2\sigma^2}-\frac{1}{2}\ln(2\pi \sigma^2))
@@ -463,53 +461,58 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
       	  \mu = -\eta_1/(2\eta_2) \text{ ; } \sigma^2 = -1/(2\eta_2)
       \end{myalign*}
       
-  \item First and second derivatives of $A(\eta)$ are related to the mean and the variance
-  \begin{myalign*}
-      \frac{d A(\eta)}{d \eta} = \E[\bm \phi(\eta)], \hspace{4pt} \frac{d^2 A(\eta)}{d \eta^2} = \V[\bm \phi(\eta)]
-  \end{myalign*}
-  \item $A(\eta)$ is convex
-  \item The generalized maximum likelihood cost to minimize is
-  \begin{myalign*}
-      \min_{\* w} \L(\* w) = - \sum_{n = 1}^N \log(p(\*y_n | \*x^T_n \* w))
-  \end{myalign*}
-  where $p(\*y_n | \* x^T_n \* w)$ is an exponential family distribution
-  \item We obtain the solution
-  \begin{myalign*}
-      \frac{d \L}{d \* w} = \*X^T[\*g^{-1}(\*X \*w ) - \bm \phi(\*y)]
-  \end{myalign*}
+      \item First and second derivatives of $A(\eta)$ are related to the mean and the variance
+      \begin{myalign*}
+          \frac{d A(\eta)}{d \eta} = \E[\bm \phi(\eta)], \hspace{4pt} \frac{d^2 A(\eta)}{d \eta^2} = \V[\bm \phi(\eta)]
+      \end{myalign*}
+      \item $A(\eta)$ is convex
+      \item The generalized maximum likelihood cost to minimize is
+      \begin{myalign*}
+          \min_{\* w} \L(\* w) = - \sum_{n = 1}^N \log(p(\*y_n | \*x^T_n \* w))
+      \end{myalign*}
+      where $p(\*y_n | \* x^T_n \* w)$ is an exponential family distribution
+      \item We obtain the solution
+      \begin{myalign*}
+          \frac{d \L}{d \* w} = \*X^T[\*g^{-1}(\*X \*w ) - \bm \phi(\*y)]
+      \end{myalign*}
 \end{itemize}
 
 % ========================================================
 
 \section{k-Nearest Neighbor (k-NN)}
 \begin{itemize}
-	\item The k-NN prediction for $\*x$ is
+	\item Performs best in low dimensions.
+	\item Assumes close points have similar values 
+	\item The k-NN regressor:
 	\begin{myalign*}
 	    f(\*x) = \frac{1}{k} \sum_{\*x_n \in nbh_k(\*x)} \*y_n
 	\end{myalign*}
-	where $nbh_k(\*x)$ is the neightborhood of $\*x$ defined by the k closest points $\*x_n$.
-	\item \textbf{Curse of dimensionality}: Generalizing correctly becomes exponentially harder as the dimensionality grows.
-	\item Gathering more inputs variables may be bad
+	\item The k-NN classifier:
+	\begin{myalign*}
+	    f(\*x) = mode\{y_n| \*x_n \in nbh_k(\*x)\}
+	\end{myalign*}
+	\item Large k $\rightarrow$ smoothing over large area
+	\item Small k $\rightarrow$ averaging over small area
+	\item \textbf{Curse of dimensionality}: Generalizing correctly becomes exponentially harder as the dimensionality grows. 
+	\item Need to let N grow like $( 1 / \alpha ) ^ { d + 1 }$
+	\item \textbf{NN performance}:
+	\begin{itemize}
+		\item Optimal Bayes classifier:$ f_*(x) = {1}\{\mathbb{P}[y=1|x] > \frac{1}{2}\}$
+		\item $\mathbb{E}_S[L(f_S)] \leq 2 L(f_*) + 4c\sqrt{d}N^{\frac{-1}{1+d}}$
+	\end{itemize}
 \end{itemize}
 
 % ========================================================
 
 \section{Support Vector Machine} 
 \begin{itemize}
-	\item Combination of the kernel trick plus a modified loss function (Hinge loss)
-	\item Solution to the dual problem is sparse and non-zero entries will be our \textbf{support vectors}.
-	\item \textbf{Kernelised feature vector} where $\bm \mu_k$ are centroids
+	\item Assume $y_n \in \{-1, 1\}$ and optimise
 	\begin{myalign*}
-	    \bm \phi(\*x) = [k(\*x, \bm \mu_1), ..., k(\*x, \bm \mu_K)]
+	    \L(\* w) = \min_{\* w} \sum_{n = 1}^N [1 - \*y_n x_n^T \* w]_+ + \frac{\lambda}{2} \lVert \*w \lVert^2
 	\end{myalign*}
-	\item In practice we'll take a subset of data points to be prototype $\rightarrow$ \textbf{sparse vector machine}.
-	\item Assume $y_n \in \{-1, 1\}$
-	\item SVM optimizes the following cost
-	\begin{myalign*}
-	    \L(\* w) = \min_{\* w} \sum_{n = 1}^N [1 - \*y_n \tilde{\* \phi}_n^T \* w]_+ + \frac{\lambda}{2} \lVert \*w \lVert^2
-	\end{myalign*}
-	\item Minimum doesn't change with a rescaling of $\* w$
-	\item choose the hyperplane so that the distance from it to the nearest data point on each side is maximized
+	\item Can be optimised using subgradient descent.
+	\item \textbf{Case: Linear separability:} We get a seperating hyperplane, no point in the margin and w, s.t margin is maximised ($2/\Vert w \Vert$).
+	\item This is called hard-margin compared to soft-margin formulation.
 	\item \textbf{Duality}:
 	\begin{itemize}
 		\item Hard to minimize $g(\* w)$ so we define
@@ -543,9 +546,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 		\begin{myalign*}
 		    \max_{\bm \alpha \in [0, 1]^N} \bm \alpha^T \*1 - \frac{1}{2\lambda} \bm \alpha^T \*Y \* X  \*X^T \* Y \bm \alpha
 		\end{myalign*}
-		\item This is a differentiable least-squares problem. Optimization is easy using Sequential Minimal Optimization. It is also naturally kernelized with $\*K = \bm X^T \bm X$
-		\item The solution $\bm \alpha$ is sparse and is non-zero only for the training examples that are instrumental in determining the decision boundary.
-		\item $\bm \alpha$ is the slope of lines that are lower bound to Hinge loss
+		\item Data only enters as $\*K = \bm X^T \bm X$.
 	\end{itemize}
 \end{itemize}
 
@@ -553,7 +554,7 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	\item {\bf Non support vector}: Example that lies on the correct side, outside margin $\bm \alpha_n = 0$
 	\item {\bf Essen. support vector}: Example that lies on the margin $\bm \alpha_n \in (0,1)$
 	\item {\bf Bound support vector}: Example that lies strictly inside the margin or wrong side $\bm \alpha_n = 1$
-	\item Use Coordinates Descent to find $\bm \alpha$. Update one coordinate ($\argmin$) at the time and others constant.
+	\item Use Coordinates ascent to find $\bm \alpha$. Update one coordinate ($\argmax$) at a time and keep others constant.
 \end{itemize}
 
 % ========================================================
@@ -616,6 +617,11 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	\begin{myalign*}
 	    \*y = \*w^T \*x = \sum_{i = 1}^K \alpha_i \*x_i^T \*x = \sum_{i = 1}^K \alpha_i k(\*x, \*x_i) 
 	\end{myalign*}
+	\item Making Kernels from other Kernels:
+	\item $\kappa \left( \mathbf { x } , \mathbf { x } ^ { \prime } \right) = a \kappa _ { 1 } \left( \mathbf { x } , \mathbf { x } ^ { \prime } \right) + b \kappa _ { 2 } \left( \mathbf { x } , \mathbf { x } ^ { \prime } \right)$ for all $a , b \geq 0$
+	\item $\kappa \left( \mathbf { x } , \mathbf { x } ^ { \prime } \right) = \kappa _ { 1 } \left( \mathbf { x } , \mathbf { x } ^ { \prime } \right) \kappa _ { 2 } \left( \mathbf { x } , \mathbf { x } ^ { \prime } \right)$
+	\item $\kappa \left( \mathbf { x } , \mathbf { x } ^ { \prime } \right) = \kappa _ { 1 } \left( f ( \mathbf { x } ) , f \left( \mathbf { x } ^ { \prime } \right) \right)$ for any f from the domain to itself
+	\item $\kappa \left( \mathbf { x } , \mathbf { x } ^ { \prime } \right) = f ( \mathbf { x } ) f \left( \mathbf { x } ^ { \prime } \right)$ for any real valued f
 \end{itemize}
 
 % ========================================================
@@ -623,7 +629,6 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 
 \section{K-means}
 \begin{itemize}
-	\item \textbf{Unsupervised learning}: Represent particular input patterns in a way that reflects the statistical structure of the overall collections of input partterns.
 	\item \textbf{Cluster} are groups of points whose inter-point distances are small compared to the distances outside the cluster.
 	\begin{myalign*}
 	    \min_{\*z, \bm \mu} \L(\*z, \bm \mu) = \sum_{k = 1}^K \sum_{n = 1}^N z_{nk} ||\*x_n - \bm \mu_k||^2_2
@@ -658,7 +663,8 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	\end{myalign*}
 	\item K-means as a Matrix Factorization
 	\begin{myalign*}
-	 \min_{\*z, \bm \mu} \L(\*z, \bm \mu) = ||\*X - \*M\*Z^T||_{\text{Frob}}^2
+	 \min_{\*z, \bm \mu} \L(\*z, \bm \mu) = ||\*X^T - \*M\*Z^T||_{\text{Frob}}^2 \\
+	 s.t. \mu _ { k } \in \mathbb { R } ^ { D }, z _ { n k } \in \{ 0,1 \} , \sum _ { k = 1 } ^ { K } z _ { n k } = 1
 	\end{myalign*}
 	\item Computation can be heavy, each example can belong to only on cluster and clusters have to be spherical.
 \end{itemize}
@@ -746,18 +752,11 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 
 \section{Matrix factorization}
 \begin{itemize}
-	\item We have $D$ movies and $N$ users
-	\item $\*X$ is a matrix $D \times N$ with $x_{dn}$ the rating of n'th user for d'th movie.
-	\item We project data vectors $\*x_n$ to a smaller dimension $\*z_n \in \mathbb R^M$
-	\item We have now 2 latent variables:
-	\begin{itemize}
-		\item $\*Z$ a $N \times K$ matrix that gives features for the users
-	 	\item $\*W$ a $D \times K$ matrix that gives features for the movies
+	 \item Find $\*X \approx \*W \*Z^\top$
+	 \begin{itemize}
+		\item $\*X$ is $D \times N$ (e.g movies $\times$ user)
+		\item $\*Z$ is $N \times K$, $\*W$ is $D \times K$ matrix
 	 \end{itemize} 
-	 \begin{myalign*}
-	     x_{dn} \approx \*w_d^T\*z_n
-	 \end{myalign*}
-	 \item We can add a regularizer and minimize the following cost:
 	 \begin{myalign*}
 	     \L(\*W, \*Z) = \frac{1}{2}\sum_{(d,n)\in\Omega} [x_{dn} - (\*W\*Z^T)_{dn}]^2 \\ + \frac{\lambda_w}{2} \lVert \*W \lVert_{\text{Frob}}^2 + \frac{\lambda_z}{2} \lVert \*Z \lVert_{\text{Frob}}^2 
 	 \end{myalign*}
@@ -781,6 +780,16 @@ Find solution $\min{\L(\*w)}$ s.t. $\*w \in \mathcal{C}$
 	 \item \textit{Complexity}: $O(D N K^2 + N K^3) \rightarrow O(D N K^2)$
 
 \end{itemize}
+
+% ========================================================
+
+\section{Text Representation}
+\begin{itemize}
+    \item \textbf{GloVe}: learn words/contexts, give weights according to freq. (nonstreaming).
+	\item \textbf{word2vec}: map every word to a vector $w_i \in \mathbb{R}^K$, K large, that captures its semantics (efficient streaming).
+	\item \textbf{FastText}: supervised sentence classification.
+\end{itemize}
+
 % ========================================================
 
 \section{Singular Value Decomposition}
